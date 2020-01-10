@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/bloc/addMailInBloc.dart';
+import 'package:simper_app/bloc/changeCommandDisposition.dart';
+import 'package:simper_app/model/addDisposition.dart';
 import 'package:simper_app/model/dispositionData.dart';
 import 'package:simper_app/model/tujuanMailInDisposisi.dart';
 
@@ -18,86 +21,38 @@ class AddMailInDisposisi extends StatefulWidget {
 }
 
 class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
-  final List peopleDisposition = [
-    {
-      "nama": "Dodin Jamiluddin, SE",
-      "status": "Sub. Bidang Anggaran 1 ( Kasubid )",
-      "Dodin Jamiluddin, SE": false
-    },
-    {
-      "nama": "Hanasary Punara, SE, MM",
-      "status": "Sub. Bidang Anggaran 2 ( Kasubid )",
-      "Hanasary Punara, SE, MM": false
-    }
-  ];
+  final Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
 
-  final Map<String, Widget> behaviour = {};
-  final _curdate = DateTime.now();
+  String jabatanId;
+  String userId;
+
+  getIdJabatan() async {
+    final sha = await _sharedPref;
+    jabatanId = sha.getString('jabatan_id');
+    userId = sha.getString('id');
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
-  }
-
-  _newWidgetBuid(String nama) {
-    String _dropDownValue;
-    return Container(
-      padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text("Untuk " + nama,
-              style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w600)),
-          SizedBox(height: 10.0),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                  // underline: Container(),
-                  hint: Text("Pilih Item"),
-                  value: _dropDownValue,
-                  onChanged: (String newValue) {
-                    setState(() {
-                      behaviour.remove(nama);
-                      _dropDownValue = newValue;
-                      behaviour.addAll({nama: _newWidgetBuid(nama)});
-                    });
-                  },
-                  items: itemsBehaviour
-                      .map((String value) => DropdownMenuItem(
-                            value: value,
-                            child:
-                                Text(value, style: TextStyle(fontSize: 12.0)),
-                          ))
-                      .toList()),
-            ),
-          ),
-          SizedBox(height: 5.0),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 1.0),
-            decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-            child: TextField(
-              decoration: InputDecoration(
-                  hintStyle: TextStyle(fontSize: 12.0),
-                  border: InputBorder.none,
-                  hintText: "Tambahan"),
-            ),
-          ),
-          SizedBox(height: 10.0),
-        ],
-      ),
-    );
+    getIdJabatan();
   }
 
   List<bool> _valueOfData = [];
 
-  itreablesBoolean(List _valueChecked) {
-    for (var i = 0; i < _valueChecked.length; i++) {
+  itreablesBoolean(int _valueChecked) {
+    for (var i = 0; i < _valueChecked; i++) {
       _valueOfData.add(false);
     }
   }
+
+  // Data Tujuan Disposisi
+  List _tujuanDisposisi;
+
+  // Add New Perintah
+  final Map<String, String> dataDisposisi = {};
+  final List<Map<String, String>> dispositionCommand = [];
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +105,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                 if (snap.data["data"] == null) {
                   return Center(child: Text("Tidak Dapat Mendisposisi"));
                 } else {
-                  itreablesBoolean(snap.data["data"]);
+                  itreablesBoolean(snap.data["data"].length);
                   return ListView.builder(
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
@@ -159,17 +114,96 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                       return Container(
                           child: CheckboxListTile(
                         onChanged: (newValue) {
-                          // setState(() {
-                          //   data["nama"] = newValue;
+                          _tujuanDisposisi = snap.data["perintah"];
 
-                          //   if (data[data["nama"]]) {
-                          //     behaviour[data["nama"]] =
-                          //         _newWidgetBuid(data["nama"]);
-                          //   } else {
-                          //     behaviour.remove(data["nama"]);
-                          //   }
-                          // });
-                          print(_valueOfData);
+                          if (_valueOfData[i] == false) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                    title: Text("Perintah Disposisi"),
+                                    content: Container(
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey)),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        child: DropdownButtonHideUnderline(
+                                            child: Consumer<
+                                                ChangeCommandDisposistion>(
+                                          builder: (context, command, _) {
+                                            return DropdownButton(
+                                                hint: Text("Pilih Item"),
+                                                value: command.value,
+                                                onChanged: (newValue) {
+                                                  print(command.value);
+                                                  command.value = newValue;
+                                                  print(command.value);
+                                                },
+                                                items: _tujuanDisposisi
+                                                    .map((value) {
+                                                  return DropdownMenuItem(
+                                                    value: value,
+                                                    child: Text(value,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 10.0)),
+                                                  );
+                                                }).toList());
+                                          },
+                                        ))),
+                                    actions: <Widget>[
+                                      Consumer<ChangeCommandDisposistion>(
+                                        builder: (context, command, _) {
+                                          return MaterialButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                dataDisposisi.addAll({
+                                                  "id_surat[]${snap.data["data"][i]["id"]}":
+                                                      snap.data["id_surat"],
+                                                  "jabatan_asal[]${snap.data["data"][i]["id"]}":
+                                                      jabatanId,
+                                                  "jabatan_tujuan[]${snap.data["data"][i]["id"]}":
+                                                      snap.data["data"][i]
+                                                          ["jabatan_id"],
+                                                  "user_asal[]${snap.data["data"][i]["id"]}":
+                                                      userId,
+                                                  "user_tujuan[]${snap.data["data"][i]["id"]}":
+                                                      snap.data["data"][i]
+                                                          ["id"],
+                                                  "instruksi[]${snap.data["data"][i]["id"]}":
+                                                      command.value,
+                                                });
+                                                // dispositionCommand.addAll([
+                                                //   {
+                                                //     "idSurat" : snap.data["id_surat"],
+                                                //     "jabatanAsal" : jabatanId,
+                                                //     "jabatanTujuan" : snap.data["data"][i]
+                                                //         ["jabatan_id"],
+                                                //     "userAsal" : userId,
+                                                //     "userTujuan" : snap.data["data"][i]["id"],
+                                                //     "instruksi" : command.value,
+                                                //   }
+                                                // ]);
+                                              });
+                                              print(dataDisposisi);
+                                              Navigator.of(context).pop();
+                                            },
+                                            color: Colors.amber[600],
+                                            child: Text("OK",
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  );
+                                });
+                          }
                           setState(() {
                             _valueOfData[i] = newValue;
                           });
@@ -186,33 +220,6 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                       ));
                     },
                   );
-                  // return Column(
-                  //     children: snap.data["data"]
-                  //         .map((data) => Container(
-                  //                 child: CheckboxListTile(
-                  //               onChanged: (newValue) {
-                  //                 // setState(() {
-                  //                 //   data["nama"] = newValue;
-
-                  //                 //   if (data[data["nama"]]) {
-                  //                 //     behaviour[data["nama"]] =
-                  //                 //         _newWidgetBuid(data["nama"]);
-                  //                 //   } else {
-                  //                 //     behaviour.remove(data["nama"]);
-                  //                 //   }
-                  //                 // });
-                  //               },
-                  //               value: false,
-                  //               title: Text(
-                  //                   data["first_name"] +
-                  //                       " " +
-                  //                       data["last_name"],
-                  //                   style: TextStyle(
-                  //                       fontWeight: FontWeight.bold,
-                  //                       color: Colors.black54)),
-                  //               subtitle: Text(data["jabatan_name"]),
-                  //             )))
-                  //         .toList());
                 }
               } else {
                 return Center(child: CircularProgressIndicator());
@@ -220,72 +227,11 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
             },
           ),
           Divider(),
-          // Container(
-          //     padding: EdgeInsets.symmetric(horizontal: 10.0),
-          //     child: Text("Tanggal Selesai :",
-          //         style: TextStyle(
-          //             fontWeight: FontWeight.bold, color: Colors.blueAccent))),
-          // Container(
-          //     padding: EdgeInsets.symmetric(horizontal: 10.0),
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: <Widget>[
-          //         Container(
-          //             width: 270.0,
-          //             child: Consumer<AddMailInBloc>(
-          //               builder: (context, addDisposition, _) => TextField(
-          //                 controller:
-          //                     TextEditingController(text: addDisposition.value),
-          //                 keyboardType: TextInputType.datetime,
-          //                 decoration: InputDecoration(
-          //                     hintText: _curdate.day.toString() +
-          //                         "-" +
-          //                         _curdate.month.toString() +
-          //                         "-" +
-          //                         _curdate.year.toString()),
-          //               ),
-          //             )),
-          //         Consumer<AddMailInBloc>(
-          //           builder: (context, addDisposition, _) => IconButton(
-          //             icon: Icon(Icons.date_range),
-          //             onPressed: () {
-          //               DatePicker.showDatePicker(context,
-          //                   showTitleActions: true,
-          //                   minTime: DateTime(2017, 1, 1),
-          //                   maxTime: DateTime(2020, 1, 1), onChanged: (date) {
-          //                 print('change $date');
-          //               }, onConfirm: (date) {
-          //                 print('confirm $date');
-          //                 String newDate = date.day.toString() +
-          //                     "-" +
-          //                     date.month.toString() +
-          //                     "-" +
-          //                     date.year.toString();
-
-          //                 addDisposition.value = newDate;
-          //               }, currentTime: DateTime.now(), locale: LocaleType.id);
-          //             },
-          //           ),
-          //         )
-          //       ],
-          //     )),
-          SizedBox(height: 10.0),
-          behaviour == null
-              ? Container()
-              : Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: behaviour.keys.map((key) {
-                      return behaviour[key];
-                    }).toList(),
-                  ),
-                ),
           Container(
             padding: EdgeInsets.all(10.0),
             child: MaterialButton(
               onPressed: () {
-                if (behaviour.isEmpty) {
+                if (dataDisposisi.isEmpty) {
                   showCupertinoDialog(
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
@@ -306,6 +252,49 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                               ),
                             ],
                           ));
+                } else {
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (context) {
+                        return FutureBuilder(
+                          future: addDispositionData(dataDisposisi),
+                          builder: (context, snap) {
+                            print("snapshot : ${snap.data}");
+                            print("data : $addDisposition");
+                            if (snap.hasData) {
+                              print("snapshot : ${snap.data}");
+                              print("data : $addDisposition");
+                              return CupertinoAlertDialog(
+                                title: Text("Status Disposisi"),
+                                content: Container(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Text(snap.data["message"]),
+                                ),
+                                actions: <Widget>[
+                                  MaterialButton(
+                                    color: Colors.amber[600],
+                                    onPressed: () {
+                                      setState(() {
+                                        dataDisposisi.clear();
+                                      });
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Close",
+                                        style: TextStyle(color: Colors.white)),
+                                  )
+                                ],
+                              );
+                            } else {
+                              print("snapshot : ${snap.data}");
+                              print("data : $addDisposition");
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
+                        );
+                      });
                 }
               },
               color: Colors.green,

@@ -19,7 +19,7 @@ class _NavigationBarOpdState extends State<NavigationBarOpd>
 
   @override
   void initState() {
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     super.initState();
   }
 
@@ -39,7 +39,7 @@ class _NavigationBarOpdState extends State<NavigationBarOpd>
           HomeScreenOpd(),
           MailInScreen(),
           MailDispositioned(),
-          MailDataInScreen(),
+          // MailDataInScreen(),
           AccountScreen()
         ],
       ),
@@ -54,7 +54,7 @@ class _NavigationBarOpdState extends State<NavigationBarOpd>
             Tab(icon: Icon(FontAwesomeIcons.home)),
             Tab(icon: Icon(FontAwesomeIcons.mailBulk)),
             Tab(icon: Icon(FontAwesomeIcons.checkSquare)),
-            Tab(icon: Icon(FontAwesomeIcons.file)),
+            // Tab(icon: Icon(FontAwesomeIcons.file)),
             Tab(icon: Icon(FontAwesomeIcons.user)),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:simper_app/bloc/addDispositionBloc.dart';
 import 'package:simper_app/bloc/addMailInBloc.dart';
+import 'package:simper_app/bloc/changeCommandDisposition.dart';
 import 'package:simper_app/bloc/detailMailBloc.dart';
 import 'package:simper_app/bloc/detailMailDisposisiBloc.dart';
 import 'package:simper_app/bloc/detailMailInBloc.dart';
@@ -34,10 +35,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<AddDispositionBloc>(
             create: (context) => AddDispositionBloc()),
-        ChangeNotifierProvider<CheckPDF>(
-            create: (context) => CheckPDF()),
+        ChangeNotifierProvider<CheckPDF>(create: (context) => CheckPDF()),
         ChangeNotifierProvider<AddMailInBloc>(
           create: (context) => AddMailInBloc(),
+        ),
+        ChangeNotifierProvider<ChangeCommandDisposistion>(
+          create: (context) => ChangeCommandDisposistion(),
         )
       ],
       child: MaterialApp(

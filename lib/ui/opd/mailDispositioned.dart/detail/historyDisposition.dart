@@ -114,7 +114,7 @@ class _HistoryMailInState extends State<HistoryDisposisiSelesai> {
                                 top: 8.0, right: 8.0, bottom: 8.0, left: 20.0),
                             color: Colors.white,
                             margin: EdgeInsets.only(bottom: 4.0),
-                            child: Row(
+                            child: Wrap(
                               children: <Widget>[
                                 Container(
                                   decoration: BoxDecoration(
@@ -178,7 +178,7 @@ class _HistoryMailInState extends State<HistoryDisposisiSelesai> {
                                 top: 8.0, right: 8.0, bottom: 8.0, left: 40.0),
                             color: Colors.white,
                             margin: EdgeInsets.only(bottom: 4.0),
-                            child: Row(
+                            child: Wrap(
                               children: <Widget>[
                                 Container(
                                   decoration: BoxDecoration(
@@ -241,7 +241,7 @@ class _HistoryMailInState extends State<HistoryDisposisiSelesai> {
                                 top: 8.0, right: 8.0, bottom: 8.0, left: 60.0),
                             color: Colors.white,
                             margin: EdgeInsets.only(bottom: 4.0),
-                            child: Row(
+                            child: Wrap(
                               children: <Widget>[
                                 Container(
                                   decoration: BoxDecoration(
@@ -305,7 +305,7 @@ class _HistoryMailInState extends State<HistoryDisposisiSelesai> {
                                 top: 8.0, right: 8.0, bottom: 8.0, left: 80.0),
                             color: Colors.white,
                             margin: EdgeInsets.only(bottom: 4.0),
-                            child: Row(
+                            child: Wrap(
                               children: <Widget>[
                                 Container(
                                   decoration: BoxDecoration(

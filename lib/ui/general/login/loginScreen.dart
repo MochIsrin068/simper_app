@@ -6,8 +6,8 @@ import 'package:simper_app/ui/general/login/connectivityValidation.dart';
 
 class LoginScreen extends StatelessWidget {
 
-  final TextEditingController _usernameController = TextEditingController(text: "kadiskominfo");
-  final TextEditingController _passwordController = TextEditingController(text: "pass1234");
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
