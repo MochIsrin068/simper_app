@@ -106,12 +106,33 @@ Future getConnection(
 
         void directly() {
           if (dataLogin["data"][0]["group_id"] == "5") {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    NavigationBarOpd()));
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => NavigationBarOpd()));
           } else {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => NavigationBar()));
+            showCupertinoDialog(
+                context: context,
+                builder: (context) {
+                  return CupertinoAlertDialog(
+                    title: Text("Login Admin"),
+                    content: Container(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text("Fitur Admin Belum Ada!"),
+                    ),
+                    actions: <Widget>[
+                      MaterialButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                        color: Colors.amber,
+                        child: Text("Tutup",
+                            style: TextStyle(color: Colors.white)),
+                      )
+                    ],
+                  );
+                });
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => NavigationBar()));
           }
         }
 

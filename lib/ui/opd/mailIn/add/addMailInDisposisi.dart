@@ -33,6 +33,11 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
     setState(() {});
   }
 
+  setPendisposisi() async {
+    final sha = await _sharedPref;
+    sha.setString("pendisposisi", jabatanId);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -274,6 +279,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                   MaterialButton(
                                     color: Colors.amber[600],
                                     onPressed: () {
+                                      setPendisposisi();
                                       setState(() {
                                         dataDisposisi.clear();
                                       });

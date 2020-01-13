@@ -18,10 +18,12 @@ class HistoryDisposisiSelesai extends StatefulWidget {
 class _HistoryMailInState extends State<HistoryDisposisiSelesai> {
   final Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
   String jabatanId;
+  String pendisposisi;
 
   getIdJabatan() async {
     final sha = await _sharedPref;
     jabatanId = sha.getString('jabatan_id');
+    pendisposisi = sha.getString('pendisposisi');
     setState(() {});
   }
 
@@ -385,13 +387,13 @@ class _HistoryMailInState extends State<HistoryDisposisiSelesai> {
         Text("Instruksi Untuk Anda : ${widget.instruksi}"),
         SizedBox(height: 10.0),
         Container(
-          child: MaterialButton(
+          child: pendisposisi == null ? Text("") : pendisposisi == jabatanId ? MaterialButton(
             onPressed: () {},
             color: Colors.red[600],
             child: Text("Tarik Diposisi",
                 style: TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
+          ) : Text("")
         )
       ],
     ));

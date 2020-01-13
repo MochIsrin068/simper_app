@@ -37,7 +37,7 @@ class NotifScreen extends StatelessWidget {
                 Icons.assignment_returned,
                 color: Colors.amber,
               ),
-              title: "Surat Keluar",
+              title: "Surat Terdisposisi",
               subtitle: "Dinas Kesehatan",
             )
           ],

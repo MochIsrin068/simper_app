@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NotifCard extends StatelessWidget {
   final String title, subtitle;
@@ -15,7 +14,6 @@ class NotifCard extends StatelessWidget {
         leading: icon,
         title: Text(title),
         subtitle: Text(subtitle),
-        trailing: Icon(FontAwesomeIcons.trash, color: Colors.red, size: 20.0,),
       ),
     );
   }

@@ -77,7 +77,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                       SizedBox(
                         height: 4.0,
                       ),
-                      Text("$_firstname $_lastname",
+                      Text("$_firstname",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18.0,
@@ -95,24 +95,25 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
               ],
             ),
           ),
-          SizedBox(height: 10.0),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              color: Colors.grey[200],
-            ),
-            height: 40.0,
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: TextField(
-              decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    FontAwesomeIcons.search,
-                    size: 20.0,
-                  ),
-                  hintText: "Search...",
-                  border: InputBorder.none),
-            ),
-          ),
+          Divider(),
+          // SizedBox(height: 10.0),
+          // Container(
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(6.0),
+          //     color: Colors.grey[200],
+          //   ),
+          //   height: 40.0,
+          //   padding: EdgeInsets.symmetric(horizontal: 10.0),
+          //   child: TextField(
+          //     decoration: InputDecoration(
+          //         prefixIcon: Icon(
+          //           FontAwesomeIcons.search,
+          //           size: 20.0,
+          //         ),
+          //         hintText: "Search...",
+          //         border: InputBorder.none),
+          //   ),
+          // ),
 
           SizedBox(height: 14.0),
 
@@ -132,6 +133,25 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
               secondcolor: Colors.amber[600],
               count: "$_suratMasuk",
               title: "Surat Masuk",
+            ),
+          ),
+          SizedBox(height: 10.0),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                return AllMailOut();
+              }));
+            },
+            child: HomeComponents(
+              icon: Icon(
+                Icons.done_all,
+                size: 60.0,
+                color: Colors.white,
+              ),
+              primarycolor: Colors.green[400],
+              secondcolor: Colors.green,
+              count: "$_suratKeluar",
+              title: "Surat Masuk Selesai",
             ),
           ),
           SizedBox(height: 10.0),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
@@ -20,6 +21,10 @@ class _DetailDispositionState extends State<DetailDispositionSelesai> {
   bool _isLoading = true;
   bool _isDocument = true;
 
+  bool _isImage = false;
+
+  String fileBase = "http://simper.technos-studio.com/upload/suratmasuk/";
+
   @override
   void initState() {
     super.initState();
@@ -27,10 +32,39 @@ class _DetailDispositionState extends State<DetailDispositionSelesai> {
   }
 
   loadDocument() async {
-    doc = await PDFDocument.fromURL(widget.url);
-    setState(() {
-      _isLoading = false;
-    });
+    var getExtenstion = widget.url.split(".");
+    String fileExtenstion = getExtenstion[1];
+    print(fileExtenstion);
+
+    switch (fileExtenstion) {
+      case "pdf":
+        doc = await PDFDocument.fromURL("$fileBase${widget.url}");
+        setState(() {
+          _isLoading = false;
+        });
+        break;
+
+      case "png":
+        setState(() {
+          _isImage = true;
+          _isLoading = false;
+        });
+        break;
+
+      case "jpg":
+        setState(() {
+          _isImage = true;
+          _isLoading = false;
+        });
+        break;
+
+      case "jpeg":
+        setState(() {
+          _isImage = true;
+          _isLoading = false;
+        });
+        break;
+    }
   }
 
   @override
@@ -90,9 +124,25 @@ class _DetailDispositionState extends State<DetailDispositionSelesai> {
                           : Container(
                               height: MediaQuery.of(context).size.height - 158,
                               child: _isDocument
-                                  ? PDFViewer(
-                                      showPicker: false,
-                                      document: doc,
+                                  ? Container(
+                                      child: _isImage
+                                          ? CachedNetworkImage(
+                                              // width: 80.0,
+                                              // height: 110.0,
+                                              // fit: BoxFit.cover,
+                                              imageUrl:
+                                                  "$fileBase${widget.url}",
+                                              placeholder: (context, url) =>
+                                                  Image.asset(
+                                                      "assets/images/loading2.gif"),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            )
+                                          : PDFViewer(
+                                              showPicker: false,
+                                              document: doc,
+                                            ),
                                     )
                                   : HistoryDisposisiSelesai(
                                       treePosition: snapshot.data["tree"],

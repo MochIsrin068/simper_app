@@ -42,7 +42,7 @@ class _ListTileMailDispositionState extends State<ListTileMailDisposition> {
                 builder: (context) => DetailDispositionSelesai(
                       disposisiId: widget.idDisposisi,
                       url:
-                          "http://simper.technos-studio.com/upload/suratmasuk/${dataDetailDisposisiMasuk["data"][0]["suratmasuk_file"]}",
+                          "${dataDetailDisposisiMasuk["data"][0]["suratmasuk_file"]}",
                     )));
           }
         },
