@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,6 +12,69 @@ import 'package:simper_app/ui/admin/home/navigationBar.dart';
 import 'package:simper_app/ui/opd/home/navigationBar.dart';
 
 Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
+
+// FOR GET TOKEN
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+String myToken;
+
+_getTokenNotif() {
+  _firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(sound: true, badge: true, alert: true));
+  _firebaseMessaging.onIosSettingsRegistered
+      .listen((IosNotificationSettings settings) {
+    print("Settings registered: $settings");
+  });
+  _firebaseMessaging.getToken().then((String token) {
+    assert(token != null);
+    print(token);
+    myToken = token;
+    print(myToken);
+  });
+}
+
+// SET DATA TO FIRESTORE
+
+var snapshotData;
+
+getDataFirestore(String id) {
+  Firestore.instance
+      .collection('users')
+      .document(id)
+      .get()
+      .then((DocumentSnapshot ds) {
+    print(ds);
+    snapshotData = ds;
+    print(snapshotData);
+  });
+}
+
+createData(String id, String username, String groupId) {
+  final document = Firestore.instance.collection('users').document(id);
+
+  Map<String, dynamic> data = {
+    'id': id,
+    'token': myToken,
+    'username': username,
+    'group_id': groupId
+  };
+
+  // getData
+  if (snapshotData == null) {
+    document.setData(data).whenComplete(() {
+      print("Data Berhasil Disimpan");
+      return SnackBar(
+        content: Text("data sudah ditambahkan"),
+      );
+    });
+  }else{
+    document.updateData(data).whenComplete(() {
+      print("Data Berhasil Di Update");
+      return SnackBar(
+        content: Text("data sudah DI UPDATE"),
+      );
+    });
+  }
+}
 
 Future getConnection(
     BuildContext context, String username, String password) async {
@@ -104,8 +169,13 @@ Future getConnection(
               );
             });
 
+        await _getTokenNotif();
         void directly() {
           if (dataLogin["data"][0]["group_id"] == "5") {
+            createData(
+                dataLogin["data"][0]["id"],
+                dataLogin["data"][0]["username"],
+                dataLogin["data"][0]["group_id"]);
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => NavigationBarOpd()));
           } else {

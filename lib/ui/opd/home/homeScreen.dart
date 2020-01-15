@@ -81,10 +81,10 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
 
-    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
-    _firebaseMessaging.getToken();
+    // _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    // _firebaseMessaging.getToken();
 
-    _firebaseMessaging.subscribeToTopic('all');
+    // _firebaseMessaging.subscribeToTopic('all');
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
@@ -139,12 +139,12 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
     });
   }
 
-  // SEND TOKEN
-  void sendTokenToServer(String fcmToken) {
-    print('Token: $fcmToken');
-    // send key to your server to allow server to use
-    // this token to send push notifications
-  }
+  // // SEND TOKEN
+  // void sendTokenToServer(String fcmToken) {
+  //   print('Token: $fcmToken');
+  //   // send key to your server to allow server to use
+  //   // this token to send push notifications
+  // }
 
   // SHOW NOTIF IOS AND ANDROID
   Future onDidReceiveLocalNotification(

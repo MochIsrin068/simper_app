@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/profile.dart';
 import 'package:simper_app/ui/general/account/editAccountScreen.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerProfile.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   // GET DATA SHARED PREFERENCES
   Future<SharedPreferences> _shared = SharedPreferences.getInstance();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   String _idUser;
   String _username;
@@ -46,6 +48,34 @@ class _AccountScreenState extends State<AccountScreen> {
   Future _logout() async {
     final sha = await _shared;
     sha.clear();
+  }
+
+  refreshToken() {
+    print("Refresh Token");
+    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    _firebaseMessaging.getToken();
+    
+    _firebaseMessaging.configure();
+
+    // _firebaseMessaging.requestNotificationPermissions(
+    //     const IosNotificationSettings(sound: true, badge: true, alert: true));
+    // _firebaseMessaging.onIosSettingsRegistered
+    //     .listen((IosNotificationSettings settings) {
+    //   print("Settings registered: $settings");
+    // });
+
+    // _firebaseMessaging.getToken().then((String token) {
+    //   assert(token != null);
+    //   print(token);
+    // });
+
+  }
+
+  // SEND TOKEN
+  void sendTokenToServer(String fcmToken) {
+    print('Token: $fcmToken');
+    // send key to your server to allow server to use
+    // this token to send push notifications
   }
 
   @override
@@ -140,7 +170,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             SizedBox(height: 10.0)
                           ],
                         );
-                      }else{
+                      } else {
                         return Container(
                           child: ShimmerProfile(),
                         );
@@ -192,6 +222,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: ListTile(
                       onTap: () {
                         _logout();
+                        refreshToken();
                         Navigator.of(context).pushReplacementNamed("/login");
                       },
                       leading: Icon(Icons.power_settings_new,
