@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/newsMail.dart';
+import 'package:simper_app/ui/general/notification/notifCard.dart';
 import 'package:simper_app/ui/general/notification/notifScreen.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
 import 'package:simper_app/ui/opd/allMail/allMailIn.dart';
@@ -51,6 +52,9 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
     setState(() {});
   }
 
+  // DATA NOTIF
+  List<NotifCard> notifData = [];
+
   // BUGES
   int counter = 0;
 
@@ -84,14 +88,28 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
+        print(notifData);
+
         setState(() {
           counter++;
+          notifData.add(
+            NotifCard(
+              icon: Icon(
+                Icons.assignment_turned_in,
+                color: Colors.blueAccent,
+              ),
+              title: message['notification']['title'],
+              subtitle: message['notification']['body'],
+            ),
+          );
         });
         // addBadge();
+        print(notifData);
 
         print("onMessage: $message");
         await displayNotification(
             message['notification']['title'], message['notification']['body']);
+
         // addBadge();
       },
       onLaunch: (Map<String, dynamic> message) async {
@@ -230,7 +248,13 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                       size: 28,
                       color: Colors.black.withOpacity(0.5),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(CupertinoPageRoute(
+                          settings: RouteSettings(isInitialRoute: true),
+                          builder: (context) => NotifScreen(
+                            dataNotif: notifData,
+                          )));
+                    },
                   ),
                 )
                 // IconButton(

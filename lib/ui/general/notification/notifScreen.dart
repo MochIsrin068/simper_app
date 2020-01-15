@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'notifCard.dart';
 
 class NotifScreen extends StatelessWidget {
+
+  final List<NotifCard> dataNotif;
+
+  NotifScreen({this.dataNotif});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,24 +28,7 @@ class NotifScreen extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.all(10.0),
         child: ListView(
-          children: <Widget>[
-            NotifCard(
-              icon: Icon(
-                Icons.assignment_turned_in,
-                color: Colors.blueAccent,
-              ),
-              title: "Surat Masuk",
-              subtitle: "Dinas Kominfo",
-            ),
-            NotifCard(
-              icon: Icon(
-                Icons.assignment_returned,
-                color: Colors.amber,
-              ),
-              title: "Surat Terdisposisi",
-              subtitle: "Dinas Kesehatan",
-            )
-          ],
+          children: dataNotif
         ),
       ),
     );
