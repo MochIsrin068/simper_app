@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'SuratMasuk.dart';
+import 'SuratMasukSelesai.dart';
 
 class MailInScreen extends StatefulWidget {
   @override
@@ -8,13 +9,13 @@ class MailInScreen extends StatefulWidget {
 
 class _MailInScreenState extends State<MailInScreen>
     with SingleTickerProviderStateMixin {
-  // TabController _tabController;
+  TabController _tabController;
 
-  // @override
-  // void initState() {
-  //   _tabController = TabController(length: 2, vsync: this);
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    _tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,35 +50,35 @@ class _MailInScreenState extends State<MailInScreen>
               ],
             ),
           ),
-          // Divider(),
-          // Container(
-          //   color: Colors.grey[100],
-          //   child: TabBar(
-          //     controller: _tabController,
-          //     labelColor: Colors.blueAccent,
-          //     labelStyle: TextStyle(fontWeight: FontWeight.bold),
-          //     tabs: <Widget>[
-          //       Tab(
-          //         text: "Surat Masuk",
-          //       ),
-          //       Tab(
-          //         text: "Surat Masuk Selesai",
-          //       ),
-          //     ],
-          //   ),
-          // ),
+          Divider(),
+          Container(
+            color: Colors.grey[100],
+            child: TabBar(
+              controller: _tabController,
+              labelColor: Colors.blueAccent,
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+              tabs: <Widget>[
+                Tab(
+                  text: "Surat Masuk",
+                ),
+                Tab(
+                  text: "Surat Masuk Selesai",
+                ),
+              ],
+            ),
+          ),
           Divider(),
           Container(
             height: MediaQuery.of(context).size.height - 100.0,
             child: 
-            // TabBarView(
-            //   physics: ScrollPhysics(),
-            //   controller: _tabController,
-            //   children: <Widget>[
+            TabBarView(
+              physics: ScrollPhysics(),
+              controller: _tabController,
+              children: <Widget>[
                 SuratMasuk(),
-            //     SuratMasukSelesai()
-            //   ],
-            // ),
+                SuratMasukSelesai()
+              ],
+            ),
           )
         ],
       ),

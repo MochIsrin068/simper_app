@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HistoryDisposisiSelesai extends StatefulWidget {
+class HistoryMailEnd extends StatefulWidget {
   final List treePosition;
   final String instruksi;
   final String disposisiId;
 
-  HistoryDisposisiSelesai(
+  HistoryMailEnd(
       {this.treePosition, this.instruksi, this.disposisiId});
 
   @override
   _HistoryMailInState createState() => _HistoryMailInState();
 }
 
-class _HistoryMailInState extends State<HistoryDisposisiSelesai> {
+class _HistoryMailInState extends State<HistoryMailEnd> {
   final Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
   String jabatanId;
   String pendisposisi;

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "550543393811",
+    "firebase_url": "https://simper-19156.firebaseio.com",
+    "project_id": "simper-19156",
+    "storage_bucket": "simper-19156.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550543393811:android:ab6a957137c0442298abe6",
+        "android_client_info": {
+          "package_name": "com.example.simper_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "550543393811-5h9gmhiq2ltqnapr1oon8jk8a0bkcdbj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-W2yku-n93wpnvyRgulHmOR_lIKznn5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "550543393811-5h9gmhiq2ltqnapr1oon8jk8a0bkcdbj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

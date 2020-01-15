@@ -7,6 +7,7 @@ import 'package:simper_app/bloc/addMailInBloc.dart';
 import 'package:simper_app/bloc/changeCommandDisposition.dart';
 import 'package:simper_app/model/addDisposition.dart';
 import 'package:simper_app/model/dispositionData.dart';
+import 'package:simper_app/model/notificationService.dart';
 import 'package:simper_app/model/tujuanMailInDisposisi.dart';
 
 class AddMailInDisposisi extends StatefulWidget {
@@ -35,7 +36,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
 
   setPendisposisi() async {
     final sha = await _sharedPref;
-    sha.setString("pendisposisi", jabatanId);
+    sha.setString("pendisposisi", "$jabatanId${widget.idDisposisi}");
   }
 
   @override
@@ -269,6 +270,9 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                             if (snap.hasData) {
                               print("snapshot : ${snap.data}");
                               print("data : $addDisposition");
+
+                              sendNotification(snap.data["message"]);
+
                               return CupertinoAlertDialog(
                                 title: Text("Status Disposisi"),
                                 content: Container(
@@ -311,4 +315,22 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
       ),
     );
   }
+
+  // SEND NOTIFICATIONS
+  Future sendNotification(String msg) async {
+    final response = await Messaging.sendToAll(
+      title: "Notifikasi",
+      body: msg,
+      // fcmToken: fcmToken,
+    );
+
+    if (response.statusCode != 200) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content:
+            Text('[${response.statusCode}] Error message: ${response.body}'),
+      ));
+    }
+  }
+
+
 }

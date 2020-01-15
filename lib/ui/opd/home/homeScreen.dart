@@ -1,5 +1,9 @@
+import 'package:badges/badges.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/newsMail.dart';
@@ -47,10 +51,137 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
     setState(() {});
   }
 
+  // BUGES
+  int counter = 0;
+
+  // Future addBadge() async {
+  //   FlutterAppBadger.updateBadgeCount(counter);
+  // }
+
+  // Future removeBadge() async {
+  //   FlutterAppBadger.removeBadge();
+  // }
+
+  //GET NOTIFIKASI
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  getNotif() {
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = IOSInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
+
+    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    _firebaseMessaging.getToken();
+
+    _firebaseMessaging.subscribeToTopic('all');
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        setState(() {
+          counter++;
+        });
+        // addBadge();
+
+        print("onMessage: $message");
+        await displayNotification(
+            message['notification']['title'], message['notification']['body']);
+        // addBadge();
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        await displayNotification(
+            message['data']['title'], message['notification']['body']);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+
+        await displayNotification(
+            message['notification']['title'], message['notification']['body']);
+      },
+    );
+
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+
+    _firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      print(token);
+    });
+  }
+
+  // SEND TOKEN
+  void sendTokenToServer(String fcmToken) {
+    print('Token: $fcmToken');
+    // send key to your server to allow server to use
+    // this token to send push notifications
+  }
+
+  // SHOW NOTIF IOS AND ANDROID
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => new CupertinoAlertDialog(
+        title: new Text(title),
+        content: new Text(body),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: new Text('Ok'),
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future onSelectNotification(String payload) async {
+    // await removeBadge();
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text("Onseledted"),
+            content: Text("On SElected"),
+          );
+        });
+  }
+
+  Future displayNotification(String title, String body) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your channel id', 'your channel name', 'your channel description',
+        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, '$title', '$body', platformChannelSpecifics,
+        payload: 'Items Here');
+  }
+
   @override
   void initState() {
     super.initState();
     _getData();
+    getNotif();
   }
 
   @override
@@ -85,36 +216,34 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                     ],
                   ),
                 ),
-                IconButton(
-                    icon: Icon(FontAwesomeIcons.bell),
-                    onPressed: () {
-                      Navigator.of(context).push(CupertinoPageRoute(
-                          settings: RouteSettings(isInitialRoute: true),
-                          builder: (context) => NotifScreen()));
-                    })
+                Badge(
+                  position: BadgePosition.topRight(top: 0, right: 3),
+                  animationDuration: Duration(milliseconds: 300),
+                  animationType: BadgeAnimationType.slide,
+                  badgeContent: Text(
+                    counter.toString(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.solidBell,
+                      size: 28,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                    onPressed: () {},
+                  ),
+                )
+                // IconButton(
+                //     icon: Icon(FontAwesomeIcons.bell),
+                //     onPressed: () {
+                //       Navigator.of(context).push(CupertinoPageRoute(
+                //           settings: RouteSettings(isInitialRoute: true),
+                //           builder: (context) => NotifScreen()));
+                //     })
               ],
             ),
           ),
           Divider(),
-          // SizedBox(height: 10.0),
-          // Container(
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(6.0),
-          //     color: Colors.grey[200],
-          //   ),
-          //   height: 40.0,
-          //   padding: EdgeInsets.symmetric(horizontal: 10.0),
-          //   child: TextField(
-          //     decoration: InputDecoration(
-          //         prefixIcon: Icon(
-          //           FontAwesomeIcons.search,
-          //           size: 20.0,
-          //         ),
-          //         hintText: "Search...",
-          //         border: InputBorder.none),
-          //   ),
-          // ),
-
           SizedBox(height: 14.0),
 
           InkWell(

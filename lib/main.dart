@@ -8,10 +8,14 @@ import 'package:simper_app/bloc/detailMailBloc.dart';
 import 'package:simper_app/bloc/detailMailDisposisiBloc.dart';
 import 'package:simper_app/bloc/detailMailInBloc.dart';
 import 'package:simper_app/bloc/loginBloc.dart';
+import 'package:simper_app/bloc/noticationCount.dart';
 import 'package:simper_app/config/routes.dart';
 import './ui/general/splash/splashScreen.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();  
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -41,6 +45,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<ChangeCommandDisposistion>(
           create: (context) => ChangeCommandDisposistion(),
+        ),
+        ChangeNotifierProvider<NotificationCount>(
+          create: (context) => NotificationCount(),
         )
       ],
       child: MaterialApp(

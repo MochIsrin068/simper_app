@@ -83,4 +83,8 @@ dependencies {
     //FOR ANDROID X
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
