@@ -34,8 +34,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   TextEditingController _controllerUsername;
   TextEditingController _controllerFirstname;
   TextEditingController _controllerLastname;
-  TextEditingController _controlleremail;
-  TextEditingController _controllerNoHp;
+  // TextEditingController _controlleremail;
+  // TextEditingController _controllerNoHp;
   TextEditingController _controllerPassword;
 
   @override
@@ -44,8 +44,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     _controllerUsername = TextEditingController(text: widget.username);
     _controllerFirstname = TextEditingController(text: widget.firstname);
     _controllerLastname = TextEditingController(text: widget.lastname);
-    _controlleremail = TextEditingController(text: widget.email);
-    _controllerNoHp = TextEditingController(text: widget.nohp);
+    // _controlleremail = TextEditingController(text: widget.email);
+    // _controllerNoHp = TextEditingController(text: widget.nohp);
     _controllerPassword = TextEditingController();
   }
 
@@ -55,8 +55,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     _controllerUsername.clear();
     _controllerFirstname.clear();
     _controllerLastname.clear();
-    _controlleremail.clear();
-    _controllerNoHp.clear();
+    // _controlleremail.clear();
+    // _controllerNoHp.clear();
     _controllerPassword.clear();
   }
 
@@ -129,34 +129,34 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 ),
               ),
             ),
-            Card(
-              margin: EdgeInsets.only(bottom: 10.0),
-              color: Colors.grey[100],
-              child: Container(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: _controlleremail,
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email, size: 14.0),
-                      border: InputBorder.none,
-                      hintText: "Email..."),
-                ),
-              ),
-            ),
-            Card(
-              margin: EdgeInsets.only(bottom: 10.0),
-              color: Colors.grey[100],
-              child: Container(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: _controllerNoHp,
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.phone, size: 14.0),
-                      border: InputBorder.none,
-                      hintText: "No Hp..."),
-                ),
-              ),
-            ),
+            // Card(
+            //   margin: EdgeInsets.only(bottom: 10.0),
+            //   color: Colors.grey[100],
+            //   child: Container(
+            //     padding: EdgeInsets.all(10.0),
+            //     child: TextField(
+            //       controller: _controlleremail,
+            //       decoration: InputDecoration(
+            //           prefixIcon: Icon(Icons.email, size: 14.0),
+            //           border: InputBorder.none,
+            //           hintText: "Email..."),
+            //     ),
+            //   ),
+            // ),
+            // Card(
+            //   margin: EdgeInsets.only(bottom: 10.0),
+            //   color: Colors.grey[100],
+            //   child: Container(
+            //     padding: EdgeInsets.all(10.0),
+            //     child: TextField(
+            //       controller: _controllerNoHp,
+            //       decoration: InputDecoration(
+            //           prefixIcon: Icon(Icons.phone, size: 14.0),
+            //           border: InputBorder.none,
+            //           hintText: "No Hp..."),
+            //     ),
+            //   ),
+            // ),
             Card(
               margin: EdgeInsets.only(bottom: 10.0),
               color: Colors.grey[100],
@@ -200,8 +200,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                               _controllerUsername.text,
                               _controllerFirstname.text,
                               _controllerLastname.text,
-                              _controlleremail.text,
-                              _controllerNoHp.text,
+                              // _controlleremail.text,
+                              // _controllerNoHp.text,
                               _controllerPassword.text),
                           builder: (contex, snap) {
                             if (snap.hasData) {

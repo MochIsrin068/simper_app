@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simper_app/model/detailDispositionIn.dart';
 import 'package:simper_app/model/disposisiMasuk.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
 
@@ -72,16 +73,18 @@ class _SuratMasukState extends State<SuratMasuk> {
               if (snapshot.hasData) {
                 if (snapshot.data["data"] == null) {
                   return Container(
-                          padding: EdgeInsets.all(20.0),
-                          width: MediaQuery.of(context).size.width,
-                          color: Colors.grey[100],
-                          child: Center(child: Text(snapshot.data["message"])));
+                      padding: EdgeInsets.all(20.0),
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.grey[100],
+                      child: Center(child: Text(snapshot.data["message"])));
                 } else {
                   return ListView.builder(
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: snapshot.data["data"].length,
                     itemBuilder: (context, i) {
+                      detailDisposisiMasukData(
+                          snapshot.data["data"][i]["disposisi_id"]);
                       return ListTileSuratMasukCard(
                         color: Colors.green[300],
                         date: snapshot.data["data"][i]

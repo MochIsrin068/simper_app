@@ -6,14 +6,14 @@ import 'package:simper_app/config/api.dart';
 var editProfile;
 
 Future editProfiledata(String idUser, String username, String firstName,
-    String lastName, String email, String phone, String password) async {
+    String lastName, String password) async {
   var res = await http.post(baseUrl + "update_profile", body: {
     "id_user": idUser,
     "username": username,
     "first_name": firstName,
     "last_name": lastName,
-    "email": email,
-    "phone": phone,
+    // "email": email,
+    // "phone": phone,
     "password": password,
   });
 

@@ -395,7 +395,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           primarycolor: Colors.cyan[400],
                           secondcolor: Colors.cyan,
                           count: snap.data["widget"][0]["widget_suratkeluar"],
-                          title: "Surat Keluar",
+                          title: "Surat Terdisposisi",
                         )
                       : HomeComponents(
                           icon: Icon(
@@ -406,7 +406,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           primarycolor: Colors.cyan[400],
                           secondcolor: Colors.cyan,
                           count: "$_suratKeluar",
-                          title: "Surat Keluar",
+                          title: "Surat Terdisposisi",
                         );
                 },
               )),

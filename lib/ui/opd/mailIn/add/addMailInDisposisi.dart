@@ -174,13 +174,13 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                           _tujuanDisposisi = snap.data["perintah"];
 
                           if (_valueOfData[i] == false) {
-                            showDialog(
+                            showCupertinoDialog(
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
+                                    // shape: RoundedRectangleBorder(
+                                    //     borderRadius:
+                                    //         BorderRadius.circular(10.0)),
                                     title: Text("Perintah Disposisi"),
                                     content: Container(
                                         decoration: BoxDecoration(
@@ -234,6 +234,8 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                                           ["id"],
                                                   "instruksi[]${snap.data["data"][i]["id"]}":
                                                       command.value,
+                                                  "disposisi_id[]${snap.data["data"][i]["id"]}":
+                                                      snap.data["id_disposisi"]
                                                 });
 
                                                 dispositionCommand.add({
@@ -271,8 +273,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                           });
                         },
                         value: _valueOfData[i],
-                        title: Text(
-                            snap.data["data"][i]["first_name"],
+                        title: Text(snap.data["data"][i]["first_name"],
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black54)),
@@ -342,6 +343,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                         dataDisposisi.clear();
                                       });
                                       sendNotification(snap.data["message"]);
+                                      Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                     },

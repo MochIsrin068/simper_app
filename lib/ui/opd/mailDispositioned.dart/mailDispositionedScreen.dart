@@ -53,11 +53,7 @@ class _MailDispositionedState extends State<MailDispositioned> {
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.playlist_add),
-                  tooltip: "Buat Surat Masuk Non - SKPD",
-                )
+                Container()
               ],
             ),
           ),

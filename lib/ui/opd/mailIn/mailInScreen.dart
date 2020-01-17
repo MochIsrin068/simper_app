@@ -42,11 +42,7 @@ class _MailInScreenState extends State<MailInScreen>
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.playlist_add),
-                  tooltip: "Buat Surat Masuk Non - SKPD",
-                )
+                Container()
               ],
             ),
           ),
