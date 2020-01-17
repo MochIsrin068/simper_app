@@ -9,6 +9,11 @@ import 'package:simper_app/ui/opd/mailIn/mailInScreen.dart';
 import 'homeScreen.dart';
 
 class NavigationBarOpd extends StatefulWidget {
+  final String username;
+  final String password;
+
+  NavigationBarOpd({this.username, this.password});
+
   @override
   _NavigationBarOpdState createState() => _NavigationBarOpdState();
 }
@@ -36,7 +41,10 @@ class _NavigationBarOpdState extends State<NavigationBarOpd>
         physics: NeverScrollableScrollPhysics(),
         controller: _tabController,
         children: <Widget>[
-          HomeScreenOpd(),
+          HomeScreenOpd(
+            username: widget.username,
+            password: widget.password,
+          ),
           MailInScreen(),
           MailDispositioned(),
           // MailDataInScreen(),

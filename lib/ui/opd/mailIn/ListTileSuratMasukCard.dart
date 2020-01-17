@@ -29,6 +29,8 @@ class _ListTileSuratMasukCardState extends State<ListTileSuratMasukCard> {
       child: ListTile(
         onTap: () {
           print("Tap");
+          print(widget.idDisposisi);
+          print(dataDetailDisposisiMasuk);
           if (dataDetailDisposisiMasuk == null) {
             showDialog(
                 context: context,
@@ -36,12 +38,36 @@ class _ListTileSuratMasukCardState extends State<ListTileSuratMasukCard> {
                   return Center(child: CircularProgressIndicator());
                 });
           } else {
-            Navigator.of(context).push(CupertinoPageRoute(
-                builder: (context) => DetailMailIn(
-                      disposisiId: widget.idDisposisi,
-                      url:
-                          "${dataDetailDisposisiMasuk["data"][0]["suratmasuk_file"]}",
-                    )));
+            if (dataDetailDisposisiMasuk["status"] == false) {
+              showCupertinoDialog(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                  title: Text("Status"),
+                  content: Container(
+                    padding: EdgeInsets.all(20.0),
+                    child: Text("Mohon Maaf Detail Data Tidak Ada!"),
+                  ),
+                  actions: <Widget>[
+                    CupertinoButton(
+                      color: Colors.amber,
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Kembali", style: TextStyle(color: Colors.white)
+                      ),
+                    )
+                  ],
+                )
+              );
+            } else {
+              Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => DetailMailIn(
+                        disposisiId: widget.idDisposisi,
+                        url:
+                            "${dataDetailDisposisiMasuk["data"][0]["suratmasuk_file"]}",
+                      )));
+            }
           }
         },
         leading: Container(

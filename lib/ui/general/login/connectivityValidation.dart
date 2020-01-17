@@ -177,7 +177,10 @@ Future getConnection(
                 dataLogin["data"][0]["username"],
                 dataLogin["data"][0]["group_id"]);
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => NavigationBarOpd()));
+                MaterialPageRoute(builder: (context) => NavigationBarOpd(
+                  username: username,
+                  password: password,
+                )));
           } else {
             showCupertinoDialog(
                 context: context,

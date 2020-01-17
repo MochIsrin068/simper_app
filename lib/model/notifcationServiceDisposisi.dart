@@ -3,12 +3,12 @@ import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 
 // HANDLE MESSAGING
-class Messaging {
+class MessagingDisposisi {
   static final Client client = Client();
 
   String subId;
 
-  Messaging({this.subId});
+  MessagingDisposisi({this.subId});
 
   // from 'https://console.firebase.google.com'
   // --> project settings --> cloud messaging --> "Server key"

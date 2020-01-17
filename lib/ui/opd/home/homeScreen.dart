@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simper_app/model/loginModel.dart';
 import 'package:simper_app/model/newsMail.dart';
 import 'package:simper_app/ui/general/notification/notifCard.dart';
 import 'package:simper_app/ui/general/notification/notifScreen.dart';
@@ -17,6 +19,11 @@ import 'package:simper_app/ui/opd/mailIn/ListTileSuratMasukCard.dart';
 import 'homeComponents.dart';
 
 class HomeScreenOpd extends StatefulWidget {
+  final String username;
+  final String password;
+
+  HomeScreenOpd({this.username, this.password});
+
   @override
   _HomeScreenOpdState createState() => _HomeScreenOpdState();
 }
@@ -36,6 +43,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
   String _suratMasuk;
   String _suratKeluar;
   String _password;
+  String _id;
   //////////////////////////
 
   Future _getData() async {
@@ -49,6 +57,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
     _suratMasuk = sha.getString("widget_suratmasuk");
     _suratKeluar = sha.getString("widget_suratkeluar");
     _password = sha.getString("password");
+    _id = sha.getString("id");
     setState(() {});
   }
 
@@ -71,7 +80,9 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  getNotif() {
+  getNotif() async {
+    await _getData();
+
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings(
@@ -84,7 +95,8 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
     // _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
     // _firebaseMessaging.getToken();
 
-    // _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.subscribeToTopic(_id);
+    print("Subscripe : $_id");
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
@@ -92,16 +104,16 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
 
         setState(() {
           counter++;
-          notifData.add(
-            NotifCard(
-              icon: Icon(
-                Icons.assignment_turned_in,
-                color: Colors.blueAccent,
-              ),
-              title: message['notification']['title'],
-              subtitle: message['notification']['body'],
-            ),
-          );
+          // notifData.add(
+          //   NotifCard(
+          //     icon: Icon(
+          //       Icons.assignment_turned_in,
+          //       color: Colors.blueAccent,
+          //     ),
+          //     title: message['notification']['title'],
+          //     subtitle: message['notification']['body'],
+          //   ),
+          // );
         });
         // addBadge();
         print(notifData);
@@ -198,7 +210,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
   @override
   void initState() {
     super.initState();
-    _getData();
+    // _getData();
     getNotif();
   }
 
@@ -234,29 +246,50 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                     ],
                   ),
                 ),
-                Badge(
-                  position: BadgePosition.topRight(top: 0, right: 3),
-                  animationDuration: Duration(milliseconds: 300),
-                  animationType: BadgeAnimationType.slide,
-                  badgeContent: Text(
-                    counter.toString(),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.solidBell,
-                      size: 28,
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(CupertinoPageRoute(
-                          settings: RouteSettings(isInitialRoute: true),
-                          builder: (context) => NotifScreen(
-                            dataNotif: notifData,
-                          )));
-                    },
-                  ),
-                )
+                _id == null
+                    ? Icon(
+                        FontAwesomeIcons.solidBell,
+                        size: 28,
+                        color: Colors.black.withOpacity(0.5),
+                      )
+                    : StreamBuilder(
+                        stream: Firestore.instance.collection(_id).snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            return Badge(
+                              position:
+                                  BadgePosition.topRight(top: 0, right: 3),
+                              animationDuration: Duration(milliseconds: 300),
+                              animationType: BadgeAnimationType.slide,
+                              badgeContent: Text(
+                                snapshot.data.documents.length.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  FontAwesomeIcons.solidBell,
+                                  size: 28,
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(CupertinoPageRoute(
+                                      settings:
+                                          RouteSettings(isInitialRoute: true),
+                                      builder: (context) => NotifScreen(
+                                          dataNotif: snapshot.data.documents)));
+                                },
+                              ),
+                            );
+                          } else {
+                            return IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  FontAwesomeIcons.solidBell,
+                                  size: 28,
+                                  color: Colors.black.withOpacity(0.5),
+                                ));
+                          }
+                        }),
                 // IconButton(
                 //     icon: Icon(FontAwesomeIcons.bell),
                 //     onPressed: () {
@@ -271,61 +304,112 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
           SizedBox(height: 14.0),
 
           InkWell(
-            onTap: () {
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
-                return AllMailIn();
-              }));
-            },
-            child: HomeComponents(
-              icon: Icon(
-                Icons.mail_outline,
-                size: 60.0,
-                color: Colors.white,
-              ),
-              primarycolor: Colors.amber,
-              secondcolor: Colors.amber[600],
-              count: "$_suratMasuk",
-              title: "Surat Masuk",
-            ),
-          ),
+              onTap: () {
+                Navigator.of(context)
+                    .push(CupertinoPageRoute(builder: (context) {
+                  return AllMailIn();
+                }));
+              },
+              child: FutureBuilder(
+                future: loginData(widget.username, widget.password),
+                builder: (context, snap) {
+                  return snap.hasData
+                      ? HomeComponents(
+                          icon: Icon(
+                            Icons.mail_outline,
+                            size: 60.0,
+                            color: Colors.white,
+                          ),
+                          primarycolor: Colors.amber,
+                          secondcolor: Colors.amber[600],
+                          count: snap.data["widget"][0]["widget_suratmasuk"],
+                          title: "Surat Masuk",
+                        )
+                      : HomeComponents(
+                          icon: Icon(
+                            Icons.mail_outline,
+                            size: 60.0,
+                            color: Colors.white,
+                          ),
+                          primarycolor: Colors.amber,
+                          secondcolor: Colors.amber[600],
+                          count: "$_suratMasuk",
+                          title: "Surat Masuk",
+                        );
+                },
+              )),
           SizedBox(height: 10.0),
           InkWell(
-            onTap: () {
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
-                return AllMailOut();
-              }));
-            },
-            child: HomeComponents(
-              icon: Icon(
-                Icons.done_all,
-                size: 60.0,
-                color: Colors.white,
-              ),
-              primarycolor: Colors.green[400],
-              secondcolor: Colors.green,
-              count: "$_suratKeluar",
-              title: "Surat Masuk Selesai",
-            ),
-          ),
+              onTap: () {
+                Navigator.of(context)
+                    .push(CupertinoPageRoute(builder: (context) {
+                  return AllMailOut();
+                }));
+              },
+              child: FutureBuilder(
+                future: loginData(widget.username, widget.password),
+                builder: (context, snap) {
+                  return snap.hasData
+                      ? HomeComponents(
+                          icon: Icon(
+                            Icons.done_all,
+                            size: 60.0,
+                            color: Colors.white,
+                          ),
+                          primarycolor: Colors.green[400],
+                          secondcolor: Colors.green,
+                          count: snap.data["widget"][0]["widget_suratkeluar"],
+                          title: "Surat Masuk Selesai",
+                        )
+                      : HomeComponents(
+                          icon: Icon(
+                            Icons.done_all,
+                            size: 60.0,
+                            color: Colors.white,
+                          ),
+                          primarycolor: Colors.green[400],
+                          secondcolor: Colors.green,
+                          count: "$_suratKeluar",
+                          title: "Surat Masuk Selesai",
+                        );
+                },
+              )),
           SizedBox(height: 10.0),
           InkWell(
-            onTap: () {
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
-                return AllMailOut();
-              }));
-            },
-            child: HomeComponents(
-              icon: Icon(
-                FontAwesomeIcons.mailBulk,
-                size: 60.0,
-                color: Colors.white,
-              ),
-              primarycolor: Colors.cyan[400],
-              secondcolor: Colors.cyan,
-              count: "$_suratKeluar",
-              title: "Surat Keluar",
-            ),
-          ),
+              onTap: () {
+                Navigator.of(context)
+                    .push(CupertinoPageRoute(builder: (context) {
+                  return AllMailOut();
+                }));
+              },
+              child: FutureBuilder(
+                future: loginData(widget.username, widget.password),
+                builder: (context, snap) {
+                  return snap.hasData
+                      ? HomeComponents(
+                          icon: Icon(
+                            FontAwesomeIcons.mailBulk,
+                            size: 60.0,
+                            color: Colors.white,
+                          ),
+                          primarycolor: Colors.cyan[400],
+                          secondcolor: Colors.cyan,
+                          count: snap.data["widget"][0]["widget_suratkeluar"],
+                          title: "Surat Keluar",
+                        )
+                      : HomeComponents(
+                          icon: Icon(
+                            FontAwesomeIcons.mailBulk,
+                            size: 60.0,
+                            color: Colors.white,
+                          ),
+                          primarycolor: Colors.cyan[400],
+                          secondcolor: Colors.cyan,
+                          count: "$_suratKeluar",
+                          title: "Surat Keluar",
+                        );
+                },
+              )),
           SizedBox(
             height: 20.0,
           ),

@@ -15,12 +15,14 @@ class _SplashScreenState extends State<SplashScreen> {
   // GET DATA SHARED PREFERENCES
   Future<SharedPreferences> _shared = SharedPreferences.getInstance();
   String _username;
+  String _password;
   String _groupID;
 
   Future _getData() async {
     final sha = await _shared;
     _username = sha.getString("username");
     _groupID = sha.getString("group_id");
+    _password = sha.getString("password");
     setState(() {});
   }
 
@@ -36,7 +38,10 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Navigator.of(context).pushReplacement(CupertinoPageRoute(
           builder: (context) =>
-              _groupID == "4" ? NavigationBar() : NavigationBarOpd()));
+              _groupID == "4" ? NavigationBar() : NavigationBarOpd(
+                password: _password,
+                username: _username,
+              )));
     }
   }
 

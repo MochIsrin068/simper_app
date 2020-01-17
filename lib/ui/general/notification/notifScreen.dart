@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'notifCard.dart';
 
 class NotifScreen extends StatelessWidget {
-
-  final List<NotifCard> dataNotif;
+  final List dataNotif;
 
   NotifScreen({this.dataNotif});
 
@@ -26,11 +25,16 @@ class NotifScreen extends StatelessWidget {
         title: Text("Notifikasi", style: TextStyle(color: Colors.black)),
       ),
       body: Container(
-        padding: EdgeInsets.all(10.0),
-        child: ListView(
-          children: dataNotif
-        ),
-      ),
+          padding: EdgeInsets.all(10.0),
+          child: ListView.builder(
+            itemCount: dataNotif.length,
+            itemBuilder: (context, i) => NotifCard(
+              leading: dataNotif[i]["noAgenda"],
+              subtitle: dataNotif[i]["title"],
+              title: dataNotif[i]["skpdPengirim"],
+              idDisposisi: dataNotif[i]["idDisposisi"],
+            ),
+          )),
     );
   }
 }

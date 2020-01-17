@@ -82,6 +82,7 @@ class _DetailMailInState extends State<DetailMailIn> {
               future: detailDisposisiMasukData(widget.disposisiId),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  print("Data ${snapshot.data}");
                   return ListView(
                     children: <Widget>[
                       Container(
@@ -154,6 +155,12 @@ class _DetailMailInState extends State<DetailMailIn> {
                                           ["disposisi_id"],
                                       suratId: snapshot.data["data"][0]
                                           ["suratmasuk_id"],
+                                      skpdPengirim: snapshot.data["data"][0]
+                                          ["skpd_pengirim"],
+                                      noAgenda: snapshot.data["data"][0]
+                                          ["suratmasuk_noagenda"],
+                                      tglTerima: snapshot.data["data"][0]
+                                          ["suratmasuk_tanggalterima"],
                                     ),
                             )
                     ],

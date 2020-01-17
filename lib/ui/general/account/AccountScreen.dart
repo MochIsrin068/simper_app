@@ -24,6 +24,7 @@ class _AccountScreenState extends State<AccountScreen> {
   String _idskpd;
   String _jabatanid;
   String _groupidskpd;
+  String _id;
   //////////////////////////
 
   Future _getData() async {
@@ -35,6 +36,7 @@ class _AccountScreenState extends State<AccountScreen> {
     _idskpd = sha.getString("id_skpd");
     _jabatanid = sha.getString("jabatan_id");
     _groupidskpd = sha.getString("group_id");
+    _id = sha.getString("id");
     setState(() {});
   }
 
@@ -52,10 +54,24 @@ class _AccountScreenState extends State<AccountScreen> {
 
   refreshToken() {
     print("Refresh Token");
-    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
-    _firebaseMessaging.getToken();
-    
-    _firebaseMessaging.configure();
+    // _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    // _firebaseMessaging.getToken();
+
+    _firebaseMessaging.unsubscribeFromTopic(_id);
+    print("UNSubscripe : $_id");
+
+
+    // _firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print("onMessage: $message");
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     print("onLaunch: $message");
+    //   },
+    //   onResume: (Map<String, dynamic> message) async {
+    //     print("onResume: $message");
+    //   },
+    // );
 
     // _firebaseMessaging.requestNotificationPermissions(
     //     const IosNotificationSettings(sound: true, badge: true, alert: true));
@@ -68,15 +84,14 @@ class _AccountScreenState extends State<AccountScreen> {
     //   assert(token != null);
     //   print(token);
     // });
-
   }
 
   // SEND TOKEN
-  void sendTokenToServer(String fcmToken) {
-    print('Token: $fcmToken');
-    // send key to your server to allow server to use
-    // this token to send push notifications
-  }
+  // void sendTokenToServer(String fcmToken) {
+  //   print('Token: $fcmToken');
+  //   // send key to your server to allow server to use
+  //   // this token to send push notifications
+  // }
 
   @override
   Widget build(BuildContext context) {

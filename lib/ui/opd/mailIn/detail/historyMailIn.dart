@@ -10,8 +10,11 @@ class HistoryMailIn extends StatefulWidget {
   final String instruksi;
   final String disposisiId;
   final String suratId;
+  final String skpdPengirim;
+  final String noAgenda;
+  final String tglTerima;
 
-  HistoryMailIn({this.treePosition, this.instruksi, this.disposisiId, this.suratId});
+  HistoryMailIn({this.treePosition, this.instruksi, this.disposisiId, this.suratId, this.skpdPengirim, this.noAgenda,this.tglTerima});
 
   @override
   _HistoryMailInState createState() => _HistoryMailInState();
@@ -397,6 +400,9 @@ class _HistoryMailInState extends State<HistoryMailIn> {
                             idJabatan: jabatanId,
                             idDisposisi: widget.disposisiId,
                             idSurat: widget.suratId,
+                            noAgenda: widget.noAgenda,
+                            skpdPengirim: widget.skpdPengirim,
+                            tglMenerima: widget.tglTerima,
                           )));
                 },
                 color: Colors.cyan,

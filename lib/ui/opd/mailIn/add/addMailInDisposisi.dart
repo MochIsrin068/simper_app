@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -7,6 +8,7 @@ import 'package:simper_app/bloc/addMailInBloc.dart';
 import 'package:simper_app/bloc/changeCommandDisposition.dart';
 import 'package:simper_app/model/addDisposition.dart';
 import 'package:simper_app/model/dispositionData.dart';
+import 'package:simper_app/model/notifcationServiceDisposisi.dart';
 import 'package:simper_app/model/notificationService.dart';
 import 'package:simper_app/model/tujuanMailInDisposisi.dart';
 
@@ -14,8 +16,17 @@ class AddMailInDisposisi extends StatefulWidget {
   final String idJabatan;
   final String idDisposisi;
   final String idSurat;
+  final String skpdPengirim;
+  final String noAgenda;
+  final String tglMenerima;
 
-  AddMailInDisposisi({this.idJabatan, this.idDisposisi, this.idSurat});
+  AddMailInDisposisi(
+      {this.idJabatan,
+      this.idDisposisi,
+      this.idSurat,
+      this.skpdPengirim,
+      this.tglMenerima,
+      this.noAgenda});
 
   @override
   _AddMailInDisposisiState createState() => _AddMailInDisposisiState();
@@ -58,7 +69,47 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
 
   // Add New Perintah
   final Map<String, String> dataDisposisi = {};
-  final List<Map<String, String>> dispositionCommand = [];
+  final List<Map> dispositionCommand = [];
+
+  // ADD DATA TO FIRESTORE
+  _createData() async {
+    for (var i = 0; i < dispositionCommand.length; i++) {
+      final document = Firestore.instance
+          .collection(dispositionCommand[i]["userTujuan"])
+          .document(dispositionCommand[i]["idSurat"]);
+
+      Map<String, dynamic> data = {
+        'idDisposisi': dispositionCommand[i]["idDisposisi"],
+        'title': dispositionCommand[i]["title"],
+        'noAgenda': dispositionCommand[i]["noAgenda"],
+        'skpdPengirim': dispositionCommand[i]["skpdPengirim"],
+        'tglTerima': dispositionCommand[i]["tglTerima"]
+      };
+
+      document.setData(data).whenComplete(() {
+        print("Data Berhasil Disimpan");
+        return SnackBar(
+          content: Text("data sudah ditambahkan"),
+        );
+      });
+
+      // SET NOTIF TO DESTINATIONS
+      print("Subscripe Tujuan Notif : ${dispositionCommand[i]["userTujuan"]}");
+      final response = await MessagingDisposisi.sendToAll(
+          title: "Surat Masuk Disposisi",
+          body: dispositionCommand[i]["skpdPengirim"],
+          speceficttopic: dispositionCommand[i]["userTujuan"]
+          // fcmToken: fcmToken,
+          );
+
+      if (response.statusCode != 200) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content:
+              Text('[${response.statusCode}] Error message: ${response.body}'),
+        ));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,19 +235,24 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                                   "instruksi[]${snap.data["data"][i]["id"]}":
                                                       command.value,
                                                 });
-                                                // dispositionCommand.addAll([
-                                                //   {
-                                                //     "idSurat" : snap.data["id_surat"],
-                                                //     "jabatanAsal" : jabatanId,
-                                                //     "jabatanTujuan" : snap.data["data"][i]
-                                                //         ["jabatan_id"],
-                                                //     "userAsal" : userId,
-                                                //     "userTujuan" : snap.data["data"][i]["id"],
-                                                //     "instruksi" : command.value,
-                                                //   }
-                                                // ]);
+
+                                                dispositionCommand.add({
+                                                  "idSurat": widget.idSurat,
+                                                  "userTujuan": snap
+                                                      .data["data"][i]["id"],
+                                                  "idDisposisi":
+                                                      widget.idDisposisi,
+                                                  "title":
+                                                      "Surat Masuk Disposisi",
+                                                  "noAgenda": widget.noAgenda,
+                                                  "skpdPengirim":
+                                                      widget.skpdPengirim,
+                                                  "tglTerima":
+                                                      widget.tglMenerima
+                                                });
                                               });
                                               print(dataDisposisi);
+                                              print(dispositionCommand);
                                               Navigator.of(context).pop();
                                             },
                                             color: Colors.amber[600],
@@ -216,9 +272,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                         },
                         value: _valueOfData[i],
                         title: Text(
-                            snap.data["data"][i]["first_name"] +
-                                " " +
-                                snap.data["data"][i]["last_name"],
+                            snap.data["data"][i]["first_name"],
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black54)),
@@ -271,7 +325,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                               print("snapshot : ${snap.data}");
                               print("data : $addDisposition");
 
-                              sendNotification(snap.data["message"]);
+                              _createData();
 
                               return CupertinoAlertDialog(
                                 title: Text("Status Disposisi"),
@@ -287,10 +341,11 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                       setState(() {
                                         dataDisposisi.clear();
                                       });
+                                      sendNotification(snap.data["message"]);
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text("Close",
+                                    child: Text("Tutup",
                                         style: TextStyle(color: Colors.white)),
                                   )
                                 ],
@@ -318,11 +373,11 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
 
   // SEND NOTIFICATIONS
   Future sendNotification(String msg) async {
+    print("Subscripe Notif : $userId");
     final response = await Messaging.sendToAll(
-      title: "Notifikasi",
-      body: msg,
-      // fcmToken: fcmToken,
-    );
+        title: "Notifikasi", body: msg, speceficttopic: userId
+        // fcmToken: fcmToken,
+        );
 
     if (response.statusCode != 200) {
       Scaffold.of(context).showSnackBar(SnackBar(
@@ -331,6 +386,4 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
       ));
     }
   }
-
-
 }
