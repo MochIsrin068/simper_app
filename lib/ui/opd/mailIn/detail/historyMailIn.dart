@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/selesaikanDisposisiMasuk.dart';
+import 'package:simper_app/model/tujuanMailInDisposisi.dart';
 import 'package:simper_app/ui/opd/mailIn/add/addMailInDisposisi.dart';
 
 class HistoryMailIn extends StatefulWidget {
@@ -393,22 +394,35 @@ class _HistoryMailInState extends State<HistoryMailIn> {
         Container(
           child: Row(
             children: <Widget>[
-              MaterialButton(
-                onPressed: () {
-                  Navigator.of(context).push(CupertinoPageRoute(
-                      builder: (context) => AddMailInDisposisi(
-                            idJabatan: jabatanId,
-                            idDisposisi: widget.disposisiId,
-                            idSurat: widget.suratId,
-                            noAgenda: widget.noAgenda,
-                            skpdPengirim: widget.skpdPengirim,
-                            tglMenerima: widget.tglTerima,
-                          )));
+              FutureBuilder(
+                future: getDataTujuanMailIn(jabatanId, widget.disposisiId, widget.suratId),
+                builder: (context, snap){
+                  if(snap.hasData){
+                    if(snap.data["status"]){
+                      return  MaterialButton(
+                        onPressed: () {
+                            Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (context) => AddMailInDisposisi(
+                                      idJabatan: jabatanId,
+                                      idDisposisi: widget.disposisiId,
+                                      idSurat: widget.suratId,
+                                      noAgenda: widget.noAgenda,
+                                      skpdPengirim: widget.skpdPengirim,
+                                      tglMenerima: widget.tglTerima,
+                                    )));
+                          },
+                          color: Colors.cyan,
+                          child: Text("Buat Disposisi",
+                              style: TextStyle(
+                                  color: Colors.white, fontWeight: FontWeight.bold)),
+                        );
+                    }else{
+                      return Container();
+                    }
+                  }else{
+                    return Container();
+                  }
                 },
-                color: Colors.cyan,
-                child: Text("Buat Disposisi",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
               ),
               SizedBox(width: 10.0),
               MaterialButton(

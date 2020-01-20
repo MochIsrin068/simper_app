@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simper_app/model/suratMasukSelesai.dart';
+import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
+import 'package:simper_app/ui/opd/mailIn/listTileMailEnd.dart';
 
-class AllMailOut extends StatefulWidget {
+class AllMailDisposisioned extends StatefulWidget {
   @override
   _AllMailOutState createState() => _AllMailOutState();
 }
 
-class _AllMailOutState extends State<AllMailOut> {
+class _AllMailOutState extends State<AllMailDisposisioned> {
   Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
 
   String _id;
@@ -47,70 +49,37 @@ class _AllMailOutState extends State<AllMailOut> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text("Semua Surat Keluar",
+                        Text("Semua Surat Terdisposisi",
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 18.0)),
                         SizedBox(height: 4.0),
-                        Text("Lihat semua surat yang keluar",
+                        Text("Lihat semua surat yang terdisposisi",
                             style: TextStyle(fontSize: 14.0))
                       ],
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.playlist_add),
-                    tooltip: "Buat Surat Masuk Non - SKPD",
-                  )
+                  Container()
                 ],
               ),
             ),
             Divider(),
-            // Container(
-            //   margin: EdgeInsets.only(bottom: 10.0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: <Widget>[
-            //       Container(
-            //         decoration: BoxDecoration(
-            //           borderRadius: BorderRadius.circular(6.0),
-            //           color: Colors.grey[200],
-            //         ),
-            //         height: 40.0,
-            //         width: MediaQuery.of(context).size.width - 70,
-            //         padding: EdgeInsets.symmetric(horizontal: 10.0),
-            //         child: TextField(
-            //           decoration: InputDecoration(
-            //               prefixIcon: Icon(
-            //                 FontAwesomeIcons.search,
-            //                 size: 20.0,
-            //               ),
-            //               hintText: "Search...",
-            //               border: InputBorder.none),
-            //         ),
-            //       ),
-            //       IconButton(
-            //         color: Colors.grey,
-            //         icon: Icon(FontAwesomeIcons.sort),
-            //         onPressed: () {},
-            //       )
-            //     ],
-            //   ),
-            // ),
             // FutureBuilder(
-            //   future: disposisiMasukData(_id),
+            //   future: suratMasukSelesaiData(_id),
             //   builder: (context, snapshot) {
             //     if (snapshot.hasData) {
             //       if (snapshot.data["data"] == null) {
-            //         return Center(
-            //           child: Text(snapshot.data["message"]),
-            //         );
+            //         return Container(
+            //             padding: EdgeInsets.all(20.0),
+            //             width: MediaQuery.of(context).size.width,
+            //             color: Colors.grey[100],
+            //             child: Center(child: Text(snapshot.data["message"])));
             //       } else {
             //         return ListView.builder(
             //           physics: ScrollPhysics(),
             //           shrinkWrap: true,
             //           itemCount: snapshot.data["data"].length,
             //           itemBuilder: (context, i) {
-            //             return ListTileSuratMasukCard(
+            //             return ListTileMailEnd(
             //               color: Colors.green[300],
             //               date: snapshot.data["data"][i]
             //                   ["suratmasuk_tanggalterima"],
@@ -123,8 +92,8 @@ class _AllMailOutState extends State<AllMailOut> {
             //         );
             //       }
             //     } else {
-            //       return Center(
-            //         child: CircularProgressIndicator(),
+            //       return Container(
+            //         child: ShimmerMailCard(),
             //       );
             //     }
             //   },

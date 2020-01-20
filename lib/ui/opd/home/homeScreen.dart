@@ -12,8 +12,9 @@ import 'package:simper_app/model/newsMail.dart';
 import 'package:simper_app/ui/general/notification/notifCard.dart';
 import 'package:simper_app/ui/general/notification/notifScreen.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
+import 'package:simper_app/ui/opd/allMail/allMailDisposisioned.dart';
 import 'package:simper_app/ui/opd/allMail/allMailIn.dart';
-import 'package:simper_app/ui/opd/allMail/allMailOut.dart';
+import 'package:simper_app/ui/opd/allMail/allMailInEnd.dart';
 import 'package:simper_app/ui/opd/mailIn/ListTileSuratMasukCard.dart';
 
 import 'homeComponents.dart';
@@ -185,14 +186,14 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
       debugPrint('notification payload: ' + payload);
     }
 
-    showDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text("Onseledted"),
-            content: Text("On SElected"),
-          );
-        });
+    // showDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return CupertinoAlertDialog(
+    //         title: Text("Onseledted"),
+    //         content: Text("On SElected"),
+    //       );
+    //     });
   }
 
   Future displayNotification(String title, String body) async {
@@ -276,6 +277,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                                       settings:
                                           RouteSettings(isInitialRoute: true),
                                       builder: (context) => NotifScreen(
+                                          collectionID: _id,
                                           dataNotif: snapshot.data.documents)));
                                 },
                               ),
@@ -343,7 +345,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
               onTap: () {
                 Navigator.of(context)
                     .push(CupertinoPageRoute(builder: (context) {
-                  return AllMailOut();
+                  return AllMailInEnd();
                 }));
               },
               child: FutureBuilder(
@@ -379,7 +381,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
               onTap: () {
                 Navigator.of(context)
                     .push(CupertinoPageRoute(builder: (context) {
-                  return AllMailOut();
+                  return AllMailDisposisioned();
                 }));
               },
               child: FutureBuilder(

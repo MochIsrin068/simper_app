@@ -386,15 +386,15 @@ class _HistoryMailInState extends State<HistoryMailEnd> {
         Divider(),
         Text("Instruksi Untuk Anda : ${widget.instruksi}"),
         SizedBox(height: 10.0),
-        Container(
-          child: pendisposisi == null ? Text("") : pendisposisi == "$jabatanId${widget.disposisiId}" ? MaterialButton(
-            onPressed: () {},
-            color: Colors.red[600],
-            child: Text("Tarik Diposisi",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-          ) : Text("")
-        )
+        // Container(
+        //   child: pendisposisi == null ? Text("") : pendisposisi == "$jabatanId${widget.disposisiId}" ? MaterialButton(
+        //     onPressed: () {},
+        //     color: Colors.red[600],
+        //     child: Text("Tarik Diposisi",
+        //         style: TextStyle(
+        //             color: Colors.white, fontWeight: FontWeight.bold)),
+        //   ) : Text("")
+        // )
       ],
     ));
   }

@@ -340,9 +340,9 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                     onPressed: () {
                                       setPendisposisi();
                                       setState(() {
+                                      sendNotification(snap.data["message"]);
                                         dataDisposisi.clear();
                                       });
-                                      sendNotification(snap.data["message"]);
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
