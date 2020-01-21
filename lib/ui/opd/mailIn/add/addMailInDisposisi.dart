@@ -320,8 +320,6 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                         return FutureBuilder(
                           future: addDispositionData(dataDisposisi),
                           builder: (context, snap) {
-                            print("snapshot : ${snap.data}");
-                            print("data : $addDisposition");
                             if (snap.hasData) {
                               print("snapshot : ${snap.data}");
                               print("data : $addDisposition");
@@ -337,15 +335,15 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                 actions: <Widget>[
                                   MaterialButton(
                                     color: Colors.amber[600],
-                                    onPressed: () {
+                                    onPressed: (){
                                       setPendisposisi();
                                       setState(() {
-                                      sendNotification(snap.data["message"]);
                                         dataDisposisi.clear();
                                       });
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
+                                      sendNotification(snap.data["message"]);
                                     },
                                     child: Text("Tutup",
                                         style: TextStyle(color: Colors.white)),
@@ -375,7 +373,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
 
   // SEND NOTIFICATIONS
   Future sendNotification(String msg) async {
-    print("Subscripe Notif : $userId");
+    print("Data Ini Subscripe Notif : $userId");
     final response = await Messaging.sendToAll(
         title: "Notifikasi", body: msg, speceficttopic: userId
         // fcmToken: fcmToken,

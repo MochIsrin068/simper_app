@@ -19,7 +19,13 @@ class _ListTileMailDispositionState extends State<ListTileMailEnd> {
   @override
   void initState() {
     super.initState();
-    detailDisposisiMasukData(widget.idDisposisi);
+    // detailDisposisiMasukData(widget.idDisposisi);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -30,42 +36,25 @@ class _ListTileMailDispositionState extends State<ListTileMailEnd> {
       child: ListTile(
         onTap: () {
           print("Tap");
-          if (dataDetailDisposisiMasuk == null) {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return Center(child: CircularProgressIndicator());
-                });
-          } else {
-            if (dataDetailDisposisiMasuk["status"] == false) {
-              showCupertinoDialog(
-                  context: context,
-                  builder: (context) => CupertinoAlertDialog(
-                        title: Text("Status"),
-                        content: Container(
-                          padding: EdgeInsets.all(20.0),
-                          child: Text("Mohon Maaf Detail Data Tidak Ada!"),
-                        ),
-                        actions: <Widget>[
-                          CupertinoButton(
-                            color: Colors.amber,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text("Kembali",
-                                style: TextStyle(color: Colors.white)),
-                          )
-                        ],
-                      ));
-            } else {
-              Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => DetailMailEnd(
-                        disposisiId: widget.idDisposisi,
-                        url:
-                            "${dataDetailDisposisiMasuk["data"][0]["suratmasuk_file"]}",
-                      )));
-            }
-          }
+          Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+            return FutureBuilder(
+              future: detailDisposisiMasukData(widget.idDisposisi),
+              builder: (context, snap) {
+                if (snap.hasData) {
+                  return DetailMailEnd(
+                    disposisiId: widget.idDisposisi,
+                    url: "${snap.data["data"][0]["suratmasuk_file"]}",
+                  );
+                } else {
+                  return Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+              },
+            );
+          }));
         },
         leading: Container(
             decoration: BoxDecoration(

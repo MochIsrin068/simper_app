@@ -34,7 +34,7 @@ class _SuratMasukState extends State<SuratMasuk> {
   Widget build(BuildContext context) {
     return Container(
       child: ListView(
-        physics: ScrollPhysics(),
+        // physics: ScrollPhysics(),
         children: <Widget>[
           // Container(
           //   margin: EdgeInsets.only(bottom: 10.0),
@@ -83,8 +83,8 @@ class _SuratMasukState extends State<SuratMasuk> {
                     shrinkWrap: true,
                     itemCount: snapshot.data["data"].length,
                     itemBuilder: (context, i) {
-                      detailDisposisiMasukData(
-                          snapshot.data["data"][i]["disposisi_id"]);
+                      // detailDisposisiMasukData(
+                      //     snapshot.data["data"][i]["disposisi_id"]);
                       return ListTileSuratMasukCard(
                         color: Colors.green[300],
                         date: snapshot.data["data"][i]

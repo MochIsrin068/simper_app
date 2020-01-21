@@ -20,10 +20,8 @@ class DetailMailIn extends StatefulWidget {
 class _DetailMailInState extends State<DetailMailIn> {
   PDFDocument doc;
 
-  bool _isLoading = true;
+  // bool _isLoading = true;
   bool _isDocument = true;
-
-  bool _isImage = false;
 
   String fileBase = "http://simper.technos-studio.com/upload/suratmasuk/";
 
@@ -34,39 +32,44 @@ class _DetailMailInState extends State<DetailMailIn> {
   }
 
   loadDocument() async {
-    var getExtenstion = widget.url.split(".");
-    String fileExtenstion = getExtenstion[1];
-    print(fileExtenstion);
+    // var getExtenstion = widget.url.split(".");
+    // String fileExtenstion = getExtenstion[1];
+    // print(fileExtenstion);
 
-    switch (fileExtenstion) {
-      case "pdf":
-        doc = await PDFDocument.fromURL("$fileBase${widget.url}");
-        setState(() {
-          _isLoading = false;
-        });
-        break;
+    // switch (fileExtenstion) {
+    // case "pdf":
+    doc = await PDFDocument.fromURL("$fileBase${widget.url}");
+    setState(() {
+      // _isLoading = false;
+    });
+    //     break;
 
-      case "png":
-        setState(() {
-          _isImage = true;
-          _isLoading = false;
-        });
-        break;
+    //   case "png":
+    //     setState(() {
+    //       _isImage = true;
+    //       _isLoading = false;
+    //     });
+    //     break;
 
-      case "jpg":
-        setState(() {
-          _isImage = true;
-          _isLoading = false;
-        });
-        break;
+    //   case "jpg":
+    //     setState(() {
+    //       _isImage = true;
+    //       _isLoading = false;
+    //     });
+    //     break;
 
-      case "jpeg":
-        setState(() {
-          _isImage = true;
-          _isLoading = false;
-        });
-        break;
-    }
+    //   case "jpeg":
+    //     setState(() {
+    //       _isImage = true;
+    //       _isLoading = false;
+    //     });
+    //     break;
+    // }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -82,7 +85,13 @@ class _DetailMailInState extends State<DetailMailIn> {
               future: detailDisposisiMasukData(widget.disposisiId),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  print("Data ${snapshot.data}");
+                  // loadDocument(snapshot.data["data"][0]["suratmasuk_file"]);
+                  // print("Data ${snapshot.data}");
+
+                  var getExtenstion =
+                      snapshot.data["data"][0]["suratmasuk_file"].split(".");
+                  String fileExtenstion = getExtenstion[1];
+                  print(fileExtenstion);
                   return ListView(
                     children: <Widget>[
                       Container(
@@ -122,47 +131,49 @@ class _DetailMailInState extends State<DetailMailIn> {
                       _isDocument
                           ? Text(snapshot.data["data"][0]["skpd_pengirim"])
                           : Divider(),
-                      _isLoading
-                          ? Center(child: CircularProgressIndicator())
-                          : Container(
-                              height: MediaQuery.of(context).size.height - 158,
-                              child: _isDocument
-                                  ? Container(
-                                      child: _isImage
-                                          ? CachedNetworkImage(
-                                              // width: 80.0,
-                                              // height: 110.0,
-                                              // fit: BoxFit.cover,
-                                              imageUrl:
-                                                  "$fileBase${widget.url}",
-                                              placeholder: (context, url) =>
-                                                  Image.asset(
-                                                      "assets/images/loading2.gif"),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
-                                            )
-                                          : PDFViewer(
-                                              showPicker: false,
-                                              document: doc,
-                                            ),
-                                    )
-                                  : HistoryMailIn(
-                                      treePosition: snapshot.data["tree"],
-                                      instruksi: snapshot.data["data"][0]
-                                          ["disposisi_instruksi"],
-                                      disposisiId: snapshot.data["data"][0]
-                                          ["disposisi_id"],
-                                      suratId: snapshot.data["data"][0]
-                                          ["suratmasuk_id"],
-                                      skpdPengirim: snapshot.data["data"][0]
-                                          ["skpd_pengirim"],
-                                      noAgenda: snapshot.data["data"][0]
-                                          ["suratmasuk_noagenda"],
-                                      tglTerima: snapshot.data["data"][0]
-                                          ["suratmasuk_tanggalterima"],
-                                    ),
-                            )
+                      // _isLoading
+                      //     ? Center(child: CircularProgressIndicator())
+                      //     :
+                      Container(
+                        height: MediaQuery.of(context).size.height - 158,
+                        child: _isDocument
+                            ? Container(
+                                child: (fileExtenstion == "png" ||
+                                        fileExtenstion == "jpg" ||
+                                        fileExtenstion == "jpeg")
+                                    ? CachedNetworkImage(
+                                        // width: 80.0,
+                                        // height: 110.0,
+                                        // fit: BoxFit.cover,
+                                        imageUrl:
+                                            "$fileBase${snapshot.data["data"][0]["suratmasuk_file"]}",
+                                        placeholder: (context, url) =>
+                                            Image.asset(
+                                                "assets/images/loading2.gif"),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
+                                      )
+                                    : PDFViewer(
+                                        showPicker: false,
+                                        document: doc,
+                                      ),
+                              )
+                            : HistoryMailIn(
+                                treePosition: snapshot.data["tree"],
+                                instruksi: snapshot.data["data"][0]
+                                    ["disposisi_instruksi"],
+                                disposisiId: snapshot.data["data"][0]
+                                    ["disposisi_id"],
+                                suratId: snapshot.data["data"][0]
+                                    ["suratmasuk_id"],
+                                skpdPengirim: snapshot.data["data"][0]
+                                    ["skpd_pengirim"],
+                                noAgenda: snapshot.data["data"][0]
+                                    ["suratmasuk_noagenda"],
+                                tglTerima: snapshot.data["data"][0]
+                                    ["suratmasuk_tanggalterima"],
+                              ),
+                      )
                     ],
                   );
                 } else {

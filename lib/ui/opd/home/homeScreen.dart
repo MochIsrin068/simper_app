@@ -7,6 +7,7 @@ import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simper_app/model/detailDispositionIn.dart';
 import 'package:simper_app/model/loginModel.dart';
 import 'package:simper_app/model/newsMail.dart';
 import 'package:simper_app/ui/general/notification/notifCard.dart';
@@ -226,25 +227,28 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 6.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text("Selamat Datang",
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
-                          )),
-                      SizedBox(
-                        height: 4.0,
-                      ),
-                      Text("$_firstname",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18.0,
-                          )),
-                    ],
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 6.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("Selamat Datang",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w600,
+                            )),
+                        SizedBox(
+                          height: 4.0,
+                        ),
+                        Text("$_firstname",
+                            maxLines: 2,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18.0,
+                            ))
+                      ],
+                    ),
                   ),
                 ),
                 _id == null
@@ -463,6 +467,8 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                       shrinkWrap: true,
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, i) {
+                        // detailDisposisiMasukData(
+                        //     snapshot.data[i]["disposisi_id"]);
                         return ListTileSuratMasukCard(
                           color: Colors.green[300],
                           date: snapshot.data[i]["suratmasuk_tanggalsurat"],

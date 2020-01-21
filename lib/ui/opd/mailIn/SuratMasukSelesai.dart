@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simper_app/model/detailDispositionIn.dart';
 import 'package:simper_app/model/suratMasukSelesai.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
 import 'package:simper_app/ui/opd/mailIn/listTileMailEnd.dart';
@@ -29,46 +30,44 @@ class _SuratMasukSelesaiState extends State<SuratMasukSelesai> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10.0),
-      child: ListView(
-        physics: BouncingScrollPhysics(),
-        children: <Widget>[
-          FutureBuilder(
-            future: suratMasukSelesaiData(_id),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data["data"] == null) {
-                  return Container(
-                      padding: EdgeInsets.all(20.0),
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.grey[100],
-                      child: Center(child: Text(snapshot.data["message"])));
-                } else {
-                  return ListView.builder(
-                    physics: ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: snapshot.data["data"].length,
-                    itemBuilder: (context, i) {
-                      return ListTileMailEnd(
-                        color: Colors.green[300],
-                        date: snapshot.data["data"][i]
-                            ["suratmasuk_tanggalterima"],
-                        nosurat: snapshot.data["data"][i]
-                            ["suratmasuk_noagenda"],
-                        idDisposisi: snapshot.data["data"][i]["disposisi_id"],
-                        title: snapshot.data["data"][i]["skpd_pengirim"],
-                      );
-                    },
+      // height: MediaQuery.of(context).size.height,
+      // padding: EdgeInsets.all(10.0),
+      child: FutureBuilder(
+        future: suratMasukSelesaiData(_id),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data["data"] == null) {
+              return Container(
+                  padding: EdgeInsets.all(20.0),
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.grey[100],
+                  child: Center(child: Text(snapshot.data["message"])));
+            } else {
+              return ListView.builder(
+                physics: ScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: snapshot.data["data"].length,
+                itemBuilder: (context, i) {
+                  // detailDisposisiMasukData(
+                  //     snapshot.data["data"][i]["disposisi_id"]);
+                  return ListTileMailEnd(
+                    color: Colors.green[300],
+                    date: snapshot.data["data"][i]
+                        ["suratmasuk_tanggalterima"],
+                    nosurat: snapshot.data["data"][i]
+                        ["suratmasuk_noagenda"],
+                    idDisposisi: snapshot.data["data"][i]["disposisi_id"],
+                    title: snapshot.data["data"][i]["skpd_pengirim"],
                   );
-                }
-              } else {
-                return Container(
-                  child: ShimmerMailCard(),
-                );
-              }
-            },
-          ),
-        ],
+                },
+              );
+            }
+          } else {
+            return Container(
+              child: ShimmerMailCard(),
+            );
+          }
+        },
       ),
     );
   }
