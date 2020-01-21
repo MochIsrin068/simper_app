@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simper_app/model/notificationServiceHistory.dart';
 import 'package:simper_app/model/selesaikanDisposisiMasuk.dart';
 import 'package:simper_app/model/tujuanMailInDisposisi.dart';
 import 'package:simper_app/ui/opd/mailIn/add/addMailInDisposisi.dart';
@@ -24,11 +25,12 @@ class HistoryMailIn extends StatefulWidget {
 class _HistoryMailInState extends State<HistoryMailIn> {
   final Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
   String jabatanId;
-
+  String userId;
 
   getIdJabatan() async {
     final sha = await _sharedPref;
     jabatanId = sha.getString('jabatan_id');
+    userId = sha.getString('id');
     setState(() {
     });
   }
@@ -445,9 +447,10 @@ class _HistoryMailInState extends State<HistoryMailIn> {
                                   onPressed: (){
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
+                                    sendNotification();
                                   },
                                   color: Colors.amber[600],
-                                  child: Text("Close", style: TextStyle(color: Colors.white)),
+                                  child: Text("Tutup", style: TextStyle(color: Colors.white)),
                                 )
                               ],
                             );
@@ -470,5 +473,21 @@ class _HistoryMailInState extends State<HistoryMailIn> {
         )
       ],
     ));
+  }
+
+  // SEND NOTIFICATIONS
+  Future sendNotification() async {
+    print("Data Ini Subscripe Notif : $userId");
+    final response = await MessagingHistory.sendToAll(
+        title: "Notifikasi", body: "Berhasil Menyelesaikan Surat", speceficttopic: userId
+        // fcmToken: fcmToken,
+        );
+
+    if (response.statusCode != 200) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content:
+            Text('[${response.statusCode}] Error message: ${response.body}'),
+      ));
+    }
   }
 }
