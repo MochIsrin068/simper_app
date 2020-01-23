@@ -365,7 +365,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           primarycolor: Colors.green[400],
                           secondcolor: Colors.green,
                           count: snap.data["widget"][0]["widget_suratkeluar"],
-                          title: "Surat Masuk Selesai",
+                          title: "Surat Masuk Disposisi",
                         )
                       : HomeComponents(
                           icon: Icon(
@@ -376,46 +376,46 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           primarycolor: Colors.green[400],
                           secondcolor: Colors.green,
                           count: "$_suratKeluar",
-                          title: "Surat Masuk Selesai",
+                          title: "Surat Masuk Disposisi",
                         );
                 },
               )),
-          SizedBox(height: 10.0),
-          InkWell(
-              onTap: () {
-                Navigator.of(context)
-                    .push(CupertinoPageRoute(builder: (context) {
-                  return AllMailDisposisioned();
-                }));
-              },
-              child: FutureBuilder(
-                future: loginData(widget.username, widget.password),
-                builder: (context, snap) {
-                  return snap.hasData
-                      ? HomeComponents(
-                          icon: Icon(
-                            FontAwesomeIcons.mailBulk,
-                            size: 60.0,
-                            color: Colors.white,
-                          ),
-                          primarycolor: Colors.cyan[400],
-                          secondcolor: Colors.cyan,
-                          count: snap.data["widget"][0]["widget_suratkeluar"],
-                          title: "Surat Terdisposisi",
-                        )
-                      : HomeComponents(
-                          icon: Icon(
-                            FontAwesomeIcons.mailBulk,
-                            size: 60.0,
-                            color: Colors.white,
-                          ),
-                          primarycolor: Colors.cyan[400],
-                          secondcolor: Colors.cyan,
-                          count: "$_suratKeluar",
-                          title: "Surat Terdisposisi",
-                        );
-                },
-              )),
+          // SizedBox(height: 10.0),
+          // InkWell(
+          //     onTap: () {
+          //       Navigator.of(context)
+          //           .push(CupertinoPageRoute(builder: (context) {
+          //         return AllMailDisposisioned();
+          //       }));
+          //     },
+          //     child: FutureBuilder(
+          //       future: loginData(widget.username, widget.password),
+          //       builder: (context, snap) {
+          //         return snap.hasData
+          //             ? HomeComponents(
+          //                 icon: Icon(
+          //                   FontAwesomeIcons.mailBulk,
+          //                   size: 60.0,
+          //                   color: Colors.white,
+          //                 ),
+          //                 primarycolor: Colors.cyan[400],
+          //                 secondcolor: Colors.cyan,
+          //                 count: snap.data["widget"][0]["widget_suratkeluar"],
+          //                 title: "Surat Terdisposisi",
+          //               )
+          //             : HomeComponents(
+          //                 icon: Icon(
+          //                   FontAwesomeIcons.mailBulk,
+          //                   size: 60.0,
+          //                   color: Colors.white,
+          //                 ),
+          //                 primarycolor: Colors.cyan[400],
+          //                 secondcolor: Colors.cyan,
+          //                 count: "$_suratKeluar",
+          //                 title: "Surat Terdisposisi",
+          //               );
+          //       },
+          //     )),
           SizedBox(
             height: 20.0,
           ),

@@ -45,7 +45,7 @@ class _MailDispositionedState extends State<MailDispositioned> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text("Surat Terdisposisi",
+                        Text("Surat Masuk Disposisi",
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 18.0)),
                         SizedBox(height: 4.0),

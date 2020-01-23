@@ -49,7 +49,7 @@ class _AllMailOutState extends State<AllMailInEnd> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text("Semua Surat Masuk Selesai",
+                        Text("Surat Masuk Disposisi",
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 18.0)),
                         SizedBox(height: 4.0),

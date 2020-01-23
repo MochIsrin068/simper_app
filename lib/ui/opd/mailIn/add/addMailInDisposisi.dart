@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/bloc/addMailInBloc.dart';
@@ -34,6 +35,8 @@ class AddMailInDisposisi extends StatefulWidget {
 
 class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
   final Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   String jabatanId;
   String userId;
@@ -335,7 +338,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                 actions: <Widget>[
                                   MaterialButton(
                                     color: Colors.amber[600],
-                                    onPressed: (){
+                                    onPressed: () {
                                       setPendisposisi();
                                       setState(() {
                                         dataDisposisi.clear();
@@ -343,7 +346,9 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
-                                      sendNotification(snap.data["message"]);
+                                      // sendNotification(snap.data["message"]);
+                                      displayNotification("Status Disposisi",
+                                          snap.data["message"]);
                                     },
                                     child: Text("Tutup",
                                         style: TextStyle(color: Colors.white)),
@@ -371,19 +376,31 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
     );
   }
 
-  // SEND NOTIFICATIONS
-  Future sendNotification(String msg) async {
-    print("Data Ini Subscripe Notif : $userId");
-    final response = await Messaging.sendToAll(
-        title: "Notifikasi", body: msg, speceficttopic: userId
-        // fcmToken: fcmToken,
-        );
-
-    if (response.statusCode != 200) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content:
-            Text('[${response.statusCode}] Error message: ${response.body}'),
-      ));
-    }
+  Future displayNotification(String title, String body) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your channel id', 'your channel name', 'your channel description',
+        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, '$title', '$body', platformChannelSpecifics,
+        payload: 'Items Here');
   }
+
+  // // SEND NOTIFICATIONS
+  // Future sendNotification(String msg) async {
+  //   print("Data Ini Subscripe Notif : $userId");
+  //   final response = await Messaging.sendToAll(
+  //       title: "Notifikasi", body: msg, speceficttopic: userId
+  //       // fcmToken: fcmToken,
+  //       );
+
+  //   if (response.statusCode != 200) {
+  //     Scaffold.of(context).showSnackBar(SnackBar(
+  //       content:
+  //           Text('[${response.statusCode}] Error message: ${response.body}'),
+  //     ));
+  //   }
+  // }
 }

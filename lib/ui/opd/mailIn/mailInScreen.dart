@@ -159,32 +159,33 @@ class _MailInScreenState extends State<MailInScreen>
               ),
             ),
             Divider(),
-            Container(
-              color: Colors.grey[100],
-              child: TabBar(
-                controller: _tabController,
-                labelColor: Colors.blueAccent,
-                labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                tabs: <Widget>[
-                  Tab(
-                    text: "Surat Masuk",
-                  ),
-                  Tab(
-                    text: "Surat Masuk Selesai",
-                  ),
-                ],
-              ),
-            ),
-            Divider(),
+            // Container(
+            //   color: Colors.grey[100],
+            //   child: TabBar(
+            //     controller: _tabController,
+            //     labelColor: Colors.blueAccent,
+            //     labelStyle: TextStyle(fontWeight: FontWeight.bold),
+            //     tabs: <Widget>[
+            //       Tab(
+            //         text: "Surat Masuk",
+            //       ),
+            //       Tab(
+            //         text: "Surat Masuk Selesai",
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Divider(),
             Expanded(
-              child: Container(
-                // height: MediaQuery.of(context).size.height,
-                child: TabBarView(
-                  physics: ScrollPhysics(),
-                  controller: _tabController,
-                  children: <Widget>[SuratMasuk(), SuratMasukSelesai()],
-                ),
-              ),
+              // child: Container(
+              //   // height: MediaQuery.of(context).size.height,
+              //   child: TabBarView(
+              //     physics: ScrollPhysics(),
+              //     controller: _tabController,
+              //     children: <Widget>[SuratMasuk(), SuratMasukSelesai()],
+              //   ),
+              // ),
+              child: SuratMasuk(),
             )
           ],
         ),

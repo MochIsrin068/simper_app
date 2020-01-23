@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/notificationServiceHistory.dart';
@@ -24,6 +25,9 @@ class HistoryMailIn extends StatefulWidget {
 
 class _HistoryMailInState extends State<HistoryMailIn> {
   final Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
   String jabatanId;
   String userId;
 
@@ -447,7 +451,8 @@ class _HistoryMailInState extends State<HistoryMailIn> {
                                   onPressed: (){
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
-                                    sendNotification();
+                                    // sendNotification();
+                                    displayNotification("Selesaikan Surat", "Berhasil Menyelesaikan Surat");
                                   },
                                   color: Colors.amber[600],
                                   child: Text("Tutup", style: TextStyle(color: Colors.white)),
@@ -475,19 +480,31 @@ class _HistoryMailInState extends State<HistoryMailIn> {
     ));
   }
 
-  // SEND NOTIFICATIONS
-  Future sendNotification() async {
-    print("Data Ini Subscripe Notif : $userId");
-    final response = await MessagingHistory.sendToAll(
-        title: "Notifikasi", body: "Berhasil Menyelesaikan Surat", speceficttopic: userId
-        // fcmToken: fcmToken,
-        );
-
-    if (response.statusCode != 200) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content:
-            Text('[${response.statusCode}] Error message: ${response.body}'),
-      ));
-    }
+  Future displayNotification(String title, String body) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your channel id', 'your channel name', 'your channel description',
+        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, '$title', '$body', platformChannelSpecifics,
+        payload: 'Items Here');
   }
+
+  // SEND NOTIFICATIONS
+  // Future sendNotification() async {
+  //   print("Data Ini Subscripe Notif : $userId");
+  //   final response = await MessagingHistory.sendToAll(
+  //       title: "Notifikasi", body: "Berhasil Menyelesaikan Surat", speceficttopic: userId
+  //       // fcmToken: fcmToken,
+  //       );
+
+  //   if (response.statusCode != 200) {
+  //     Scaffold.of(context).showSnackBar(SnackBar(
+  //       content:
+  //           Text('[${response.statusCode}] Error message: ${response.body}'),
+  //     ));
+  //   }
+  // }
 }
