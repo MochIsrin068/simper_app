@@ -32,7 +32,7 @@ class _AllMailOutState extends State<AllMailInEnd> {
       body: Container(
         padding: EdgeInsets.all(10.0),
         child: ListView(
-          physics: BouncingScrollPhysics(),
+          // physics: BouncingScrollPhysics(),
           children: <Widget>[
             Container(
               child: Row(

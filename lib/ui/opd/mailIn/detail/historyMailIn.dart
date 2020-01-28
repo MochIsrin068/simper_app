@@ -16,8 +16,17 @@ class HistoryMailIn extends StatefulWidget {
   final String skpdPengirim;
   final String noAgenda;
   final String tglTerima;
+  final String statusDisposisi;
 
-  HistoryMailIn({this.treePosition, this.instruksi, this.disposisiId, this.suratId, this.skpdPengirim, this.noAgenda,this.tglTerima});
+  HistoryMailIn(
+      {this.treePosition,
+      this.instruksi,
+      this.disposisiId,
+      this.suratId,
+      this.skpdPengirim,
+      this.noAgenda,
+      this.tglTerima,
+      this.statusDisposisi});
 
   @override
   _HistoryMailInState createState() => _HistoryMailInState();
@@ -25,7 +34,7 @@ class HistoryMailIn extends StatefulWidget {
 
 class _HistoryMailInState extends State<HistoryMailIn> {
   final Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   String jabatanId;
@@ -35,8 +44,7 @@ class _HistoryMailInState extends State<HistoryMailIn> {
     final sha = await _sharedPref;
     jabatanId = sha.getString('jabatan_id');
     userId = sha.getString('id');
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -51,349 +59,462 @@ class _HistoryMailInState extends State<HistoryMailIn> {
         child: ListView(
       children: <Widget>[
         Container(
-          child: ListView.builder(
-            physics: ScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: widget.treePosition.length,
-            itemBuilder: (context, i){
-              return ListView(
-                physics: ScrollPhysics(),
-                shrinkWrap: true,
-                children: <Widget>[   
-                  Container(
-                            padding: EdgeInsets.only(
-                                top: 8.0, right: 8.0, bottom: 8.0),
-                            color: Colors.white,
-                            margin: EdgeInsets.only(bottom: 4.0),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: widget.treePosition[i]["disposisi_status"] == "0"
-                                          ? Colors.red[300]
-                                          :widget.treePosition[i]["disposisi_status"] == "1"
-                                              ? Colors.amber[400]
-                                              : Colors.greenAccent,
-                                      borderRadius: BorderRadius.circular(6.0)),
-                                  height: 30.0,
-                                  width: 30.0,
-                                  child: Icon(
-                                    widget.treePosition[i]["disposisi_status"] == "0"
-                                        ? FontAwesomeIcons.eyeSlash
-                                        : widget.treePosition[i]["disposisi_status"] == "1"
-                                            ? FontAwesomeIcons.clock
-                                            : FontAwesomeIcons.check,
-                                    color: Colors.white,
-                                    size: 14.0,
-                                  ),
-                                ),
-                                SizedBox(width: 6.0),
-                                Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        widget.treePosition[i]["jabatan_name"],
-                                        style: TextStyle(fontSize: 14.0),
-                                      ),
-                                      Text(
-                                        widget.treePosition[i]["disposisi_status"] == "0"
-                                            ? "Belum Diproses"
-                                            : widget.treePosition[i]["disposisi_status"] == "1"
-                                                ? "Disposisi Kebawah"
-                                                : "Selesai",
-                                        style: TextStyle(fontSize: 12.0),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
+            child: ListView.builder(
+          physics: ScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: widget.treePosition.length,
+          itemBuilder: (context, i) {
+            return ListView(
+              physics: ScrollPhysics(),
+              shrinkWrap: true,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(top: 8.0, right: 8.0, bottom: 8.0),
+                  color: Colors.white,
+                  margin: EdgeInsets.only(bottom: 4.0),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                            color: widget.treePosition[i]["disposisi_status"] ==
+                                    "0"
+                                ? Colors.red[300]
+                                : widget.treePosition[i]["disposisi_status"] ==
+                                        "1"
+                                    ? Colors.amber[400]
+                                    : Colors.greenAccent,
+                            borderRadius: BorderRadius.circular(6.0)),
+                        height: 30.0,
+                        width: 30.0,
+                        child: Icon(
+                          widget.treePosition[i]["disposisi_status"] == "0"
+                              ? FontAwesomeIcons.eyeSlash
+                              : widget.treePosition[i]["disposisi_status"] ==
+                                      "1"
+                                  ? FontAwesomeIcons.clock
+                                  : FontAwesomeIcons.check,
+                          color: Colors.white,
+                          size: 14.0,
+                        ),
+                      ),
+                      SizedBox(width: 6.0),
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              widget.treePosition[i]["jabatan_name"],
+                              style: TextStyle(fontSize: 14.0),
                             ),
-                          ),
-                          /////////////////////// 2/////////////////
-                          widget.treePosition[i]["length"] == 0 ? Container() : ListView.builder(
+                            Text(
+                              widget.treePosition[i]["disposisi_status"] == "0"
+                                  ? "Belum Diproses"
+                                  : widget.treePosition[i]
+                                              ["disposisi_status"] ==
+                                          "1"
+                                      ? "Disposisi Kebawah"
+                                      : "Selesai",
+                              style: TextStyle(fontSize: 12.0),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                /////////////////////// 2/////////////////
+                widget.treePosition[i]["length"] == 0
+                    ? Container()
+                    : ListView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: widget.treePosition[i]["length"],
+                        itemBuilder: (context, i2) {
+                          return ListView(
                             physics: ScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: widget.treePosition[i]["length"],
-                            itemBuilder: (context, i2){
-                              return ListView(
-                                physics: ScrollPhysics(),
-                                shrinkWrap: true,
-                                children: <Widget>[
-                                  Container(
-                            padding: EdgeInsets.only(
-                                top: 8.0, right: 8.0, bottom: 8.0, left: 20.0),
-                            color: Colors.white,
-                            margin: EdgeInsets.only(bottom: 4.0),
-                            child: Wrap(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: widget.treePosition[i]["child"][i2]["disposisi_status"] == "0"
-                                          ? Colors.red[300]
-                                          :widget.treePosition[i]["child"][i2]["disposisi_status"] == "1"
-                                              ? Colors.amber[400]
-                                              : Colors.greenAccent,
-                                      borderRadius: BorderRadius.circular(6.0)),
-                                  height: 30.0,
-                                  width: 30.0,
-                                  child: Icon(
-                                    widget.treePosition[i]["child"][i2]["disposisi_status"] == "0"
-                                        ? FontAwesomeIcons.eyeSlash
-                                        : widget.treePosition[i]["child"][i2]["disposisi_status"] == "1"
-                                            ? FontAwesomeIcons.clock
-                                            : FontAwesomeIcons.check,
-                                    color: Colors.white,
-                                    size: 14.0,
-                                  ),
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 8.0,
+                                    right: 8.0,
+                                    bottom: 8.0,
+                                    left: 20.0),
+                                color: Colors.white,
+                                margin: EdgeInsets.only(bottom: 4.0),
+                                child: Wrap(
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: widget.treePosition[i]["child"]
+                                                          [i2]
+                                                      ["disposisi_status"] ==
+                                                  "0"
+                                              ? Colors.red[300]
+                                              : widget.treePosition[i]["child"]
+                                                              [i2][
+                                                          "disposisi_status"] ==
+                                                      "1"
+                                                  ? Colors.amber[400]
+                                                  : Colors.greenAccent,
+                                          borderRadius:
+                                              BorderRadius.circular(6.0)),
+                                      height: 30.0,
+                                      width: 30.0,
+                                      child: Icon(
+                                        widget.treePosition[i]["child"][i2]
+                                                    ["disposisi_status"] ==
+                                                "0"
+                                            ? FontAwesomeIcons.eyeSlash
+                                            : widget.treePosition[i]["child"]
+                                                            [i2]
+                                                        ["disposisi_status"] ==
+                                                    "1"
+                                                ? FontAwesomeIcons.clock
+                                                : FontAwesomeIcons.check,
+                                        color: Colors.white,
+                                        size: 14.0,
+                                      ),
+                                    ),
+                                    SizedBox(width: 6.0),
+                                    Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            widget.treePosition[i]["child"][i2]
+                                                ["jabatan_name"],
+                                            style: TextStyle(fontSize: 14.0),
+                                          ),
+                                          Text(
+                                            widget.treePosition[i]["child"][i2]
+                                                        ["disposisi_status"] ==
+                                                    "0"
+                                                ? "Belum Diproses"
+                                                : widget.treePosition[i]
+                                                                ["child"][i2][
+                                                            "disposisi_status"] ==
+                                                        "1"
+                                                    ? "Disposisi Kebawah"
+                                                    : "Selesai",
+                                            style: TextStyle(fontSize: 12.0),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                SizedBox(width: 6.0),
-                                Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        widget.treePosition[i]["child"][i2]["jabatan_name"],
-                                        style: TextStyle(fontSize: 14.0),
-                                      ),
-                                      Text(
-                                        widget.treePosition[i]["child"][i2]["disposisi_status"] == "0"
-                                            ? "Belum Diproses"
-                                            : widget.treePosition[i]["child"][i2]["disposisi_status"] == "1"
-                                                ? "Disposisi Kebawah"
-                                                : "Selesai",
-                                        style: TextStyle(fontSize: 12.0),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                              ),
 
+                              /////////////////////// 3/////////////////
+                              widget.treePosition[i]["child"][i2]["length"] == 0
+                                  ? Container()
+                                  : ListView.builder(
+                                      physics: ScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: widget.treePosition[i]["child"]
+                                          [i2]["length"],
+                                      itemBuilder: (context, i3) {
+                                        return ListView(
+                                          physics: ScrollPhysics(),
+                                          shrinkWrap: true,
+                                          children: <Widget>[
+                                            Container(
+                                              padding: EdgeInsets.only(
+                                                  top: 8.0,
+                                                  right: 8.0,
+                                                  bottom: 8.0,
+                                                  left: 40.0),
+                                              color: Colors.white,
+                                              margin:
+                                                  EdgeInsets.only(bottom: 4.0),
+                                              child: Wrap(
+                                                children: <Widget>[
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        color: widget.treePosition[i]["child"]
+                                                                            [i2]
+                                                                        ["child"][i3]
+                                                                    [
+                                                                    "disposisi_status"] ==
+                                                                "0"
+                                                            ? Colors.red[300]
+                                                            : widget.treePosition[i]["child"][i2]["child"][i3]["disposisi_status"] ==
+                                                                    "1"
+                                                                ? Colors
+                                                                    .amber[400]
+                                                                : Colors
+                                                                    .greenAccent,
+                                                        borderRadius:
+                                                            BorderRadius.circular(6.0)),
+                                                    height: 30.0,
+                                                    width: 30.0,
+                                                    child: Icon(
+                                                      widget.treePosition[i]["child"]
+                                                                          [i2]
+                                                                      ["child"][i3][
+                                                                  "disposisi_status"] ==
+                                                              "0"
+                                                          ? FontAwesomeIcons
+                                                              .eyeSlash
+                                                          : widget.treePosition[i]["child"]
+                                                                          [i2]["child"][i3][
+                                                                      "disposisi_status"] ==
+                                                                  "1"
+                                                              ? FontAwesomeIcons
+                                                                  .clock
+                                                              : FontAwesomeIcons
+                                                                  .check,
+                                                      color: Colors.white,
+                                                      size: 14.0,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 6.0),
+                                                  Container(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          widget.treePosition[i]
+                                                                      ["child"][
+                                                                  i2]["child"][i3]
+                                                              ["jabatan_name"],
+                                                          style: TextStyle(
+                                                              fontSize: 14.0),
+                                                        ),
+                                                        Text(
+                                                          widget.treePosition[i]["child"]
+                                                                              [i2]
+                                                                          ["child"][i3]
+                                                                      [
+                                                                      "disposisi_status"] ==
+                                                                  "0"
+                                                              ? "Belum Diproses"
+                                                              : widget.treePosition[i]
+                                                                              [
+                                                                              "child"][i2]["child"][i3]
+                                                                          [
+                                                                          "disposisi_status"] ==
+                                                                      "1"
+                                                                  ? "Disposisi Kebawah"
+                                                                  : "Selesai",
+                                                          style: TextStyle(
+                                                              fontSize: 12.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
 
-                          /////////////////////// 3/////////////////
-                          widget.treePosition[i]["child"][i2]["length"] == 0 ? Container() : ListView.builder(
-                            physics: ScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: widget.treePosition[i]["child"][i2]["length"],
-                            itemBuilder: (context, i3){
-                              return ListView(
-                                physics: ScrollPhysics(),
-                                shrinkWrap: true,
-                                children: <Widget>[
-                                  Container(
-                            padding: EdgeInsets.only(
-                                top: 8.0, right: 8.0, bottom: 8.0, left: 40.0),
-                            color: Colors.white,
-                            margin: EdgeInsets.only(bottom: 4.0),
-                            child: Wrap(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: widget.treePosition[i]["child"][i2]["child"][i3]["disposisi_status"] == "0"
-                                          ? Colors.red[300]
-                                          :widget.treePosition[i]["child"][i2]["child"][i3]["disposisi_status"] == "1"
-                                              ? Colors.amber[400]
-                                              : Colors.greenAccent,
-                                      borderRadius: BorderRadius.circular(6.0)),
-                                  height: 30.0,
-                                  width: 30.0,
-                                  child: Icon(
-                                    widget.treePosition[i]["child"][i2]["child"][i3]["disposisi_status"] == "0"
-                                        ? FontAwesomeIcons.eyeSlash
-                                        : widget.treePosition[i]["child"][i2]["child"][i3]["disposisi_status"] == "1"
-                                            ? FontAwesomeIcons.clock
-                                            : FontAwesomeIcons.check,
-                                    color: Colors.white,
-                                    size: 14.0,
-                                  ),
-                                ),
-                                SizedBox(width: 6.0),
-                                Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        widget.treePosition[i]["child"][i2]["child"][i3]["jabatan_name"],
-                                        style: TextStyle(fontSize: 14.0),
-                                      ),
-                                      Text(
-                                        widget.treePosition[i]["child"][i2]["child"][i3]["disposisi_status"] == "0"
-                                            ? "Belum Diproses"
-                                            : widget.treePosition[i]["child"][i2]["child"][i3]["disposisi_status"] == "1"
-                                                ? "Disposisi Kebawah"
-                                                : "Selesai",
-                                        style: TextStyle(fontSize: 12.0),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                                            /////////////////////// 4/////////////////
+                                            widget.treePosition[i]["child"][i2]
+                                                            ["child"][i3]
+                                                        ["length"] ==
+                                                    0
+                                                ? Container()
+                                                : ListView.builder(
+                                                    physics: ScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount: widget
+                                                                .treePosition[i]
+                                                            ["child"][i2]
+                                                        ["child"][i3]["length"],
+                                                    itemBuilder: (context, i4) {
+                                                      return ListView(
+                                                        physics:
+                                                            ScrollPhysics(),
+                                                        shrinkWrap: true,
+                                                        children: <Widget>[
+                                                          Container(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 8.0,
+                                                                    right: 8.0,
+                                                                    bottom: 8.0,
+                                                                    left: 60.0),
+                                                            color: Colors.white,
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    bottom:
+                                                                        4.0),
+                                                            child: Wrap(
+                                                              children: <
+                                                                  Widget>[
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                      color: widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] ==
+                                                                              "0"
+                                                                          ? Colors.red[
+                                                                              300]
+                                                                          : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] == "1"
+                                                                              ? Colors.amber[
+                                                                                  400]
+                                                                              : Colors
+                                                                                  .greenAccent,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(6.0)),
+                                                                  height: 30.0,
+                                                                  width: 30.0,
+                                                                  child: Icon(
+                                                                    widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4][
+                                                                                "disposisi_status"] ==
+                                                                            "0"
+                                                                        ? FontAwesomeIcons
+                                                                            .eyeSlash
+                                                                        : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] ==
+                                                                                "1"
+                                                                            ? FontAwesomeIcons.clock
+                                                                            : FontAwesomeIcons.check,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    size: 14.0,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 6.0),
+                                                                Container(
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Text(
+                                                                        widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]
+                                                                            [
+                                                                            "jabatan_name"],
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                14.0),
+                                                                      ),
+                                                                      Text(
+                                                                        widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] ==
+                                                                                "0"
+                                                                            ? "Belum Diproses"
+                                                                            : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] == "1"
+                                                                                ? "Disposisi Kebawah"
+                                                                                : "Selesai",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12.0),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
 
-                          /////////////////////// 4/////////////////
-                          widget.treePosition[i]["child"][i2]["child"][i3]["length"] == 0 ? Container() : ListView.builder(
-                            physics: ScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: widget.treePosition[i]["child"][i2]["child"][i3]["length"],
-                            itemBuilder: (context, i4){
-                              return ListView(
-                                physics: ScrollPhysics(),
-                                shrinkWrap: true,
-                                children: <Widget>[
-                                  Container(
-                            padding: EdgeInsets.only(
-                                top: 8.0, right: 8.0, bottom: 8.0, left: 60.0),
-                            color: Colors.white,
-                            margin: EdgeInsets.only(bottom: 4.0),
-                            child: Wrap(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] == "0"
-                                          ? Colors.red[300]
-                                          :widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] == "1"
-                                              ? Colors.amber[400]
-                                              : Colors.greenAccent,
-                                      borderRadius: BorderRadius.circular(6.0)),
-                                  height: 30.0,
-                                  width: 30.0,
-                                  child: Icon(
-                                    widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] == "0"
-                                        ? FontAwesomeIcons.eyeSlash
-                                        : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] == "1"
-                                            ? FontAwesomeIcons.clock
-                                            : FontAwesomeIcons.check,
-                                    color: Colors.white,
-                                    size: 14.0,
-                                  ),
-                                ),
-                                SizedBox(width: 6.0),
-                                Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["jabatan_name"],
-                                        style: TextStyle(fontSize: 14.0),
-                                      ),
-                                      Text(
-                                        widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] == "0"
-                                            ? "Belum Diproses"
-                                            : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["disposisi_status"] == "1"
-                                                ? "Disposisi Kebawah"
-                                                : "Selesai",
-                                        style: TextStyle(fontSize: 12.0),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-
-
-                          /////////////////////// 5/////////////////
-                          widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["length"] == 0 ? Container() : ListView.builder(
-                            physics: ScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["length"],
-                            itemBuilder: (context, i5){
-                              return ListView(
-                                physics: ScrollPhysics(),
-                                shrinkWrap: true,
-                                children: <Widget>[
-                                  Container(
-                            padding: EdgeInsets.only(
-                                top: 8.0, right: 8.0, bottom: 8.0, left: 80.0),
-                            color: Colors.white,
-                            margin: EdgeInsets.only(bottom: 4.0),
-                            child: Wrap(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "0"
-                                          ? Colors.red[300]
-                                          :widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "1"
-                                              ? Colors.amber[400]
-                                              : Colors.greenAccent,
-                                      borderRadius: BorderRadius.circular(6.0)),
-                                  height: 30.0,
-                                  width: 30.0,
-                                  child: Icon(
-                                    widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "0"
-                                        ? FontAwesomeIcons.eyeSlash
-                                        : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "1"
-                                            ? FontAwesomeIcons.clock
-                                            : FontAwesomeIcons.check,
-                                    color: Colors.white,
-                                    size: 14.0,
-                                  ),
-                                ),
-                                SizedBox(width: 6.0),
-                                Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["jabatan_name"],
-                                        style: TextStyle(fontSize: 14.0),
-                                      ),
-                                      Text(
-                                        widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "0"
-                                            ? "Belum Diproses"
-                                            : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "1"
-                                                ? "Disposisi Kebawah"
-                                                : "Selesai",
-                                        style: TextStyle(fontSize: 12.0),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-
-                          
-                                ],
-                              );
-                            },
-                          )
-
-                          
-                                ],
-                              );
-                            },
-                          )
-
-                          
-                                ],
-                              );
-                            },
-                          )
-
-                          
-                                ],
-                              );
-                            },
-                          )
-                ],
-              );
-            },
-          )
-        ),
+                                                          /////////////////////// 5/////////////////
+                                                          widget.treePosition[i]["child"][i2]["child"]
+                                                                              [
+                                                                              i3]
+                                                                          [
+                                                                          "child"][i4]
+                                                                      [
+                                                                      "length"] ==
+                                                                  0
+                                                              ? Container()
+                                                              : ListView
+                                                                  .builder(
+                                                                  physics:
+                                                                      ScrollPhysics(),
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  itemCount: widget.treePosition[i]["child"][i2]["child"]
+                                                                              [
+                                                                              i3]
+                                                                          [
+                                                                          "child"][i4]
+                                                                      [
+                                                                      "length"],
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          i5) {
+                                                                    return ListView(
+                                                                      physics:
+                                                                          ScrollPhysics(),
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Container(
+                                                                          padding: EdgeInsets.only(
+                                                                              top: 8.0,
+                                                                              right: 8.0,
+                                                                              bottom: 8.0,
+                                                                              left: 80.0),
+                                                                          color:
+                                                                              Colors.white,
+                                                                          margin:
+                                                                              EdgeInsets.only(bottom: 4.0),
+                                                                          child:
+                                                                              Wrap(
+                                                                            children: <Widget>[
+                                                                              Container(
+                                                                                decoration: BoxDecoration(color: widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "0" ? Colors.red[300] : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "1" ? Colors.amber[400] : Colors.greenAccent, borderRadius: BorderRadius.circular(6.0)),
+                                                                                height: 30.0,
+                                                                                width: 30.0,
+                                                                                child: Icon(
+                                                                                  widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "0" ? FontAwesomeIcons.eyeSlash : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "1" ? FontAwesomeIcons.clock : FontAwesomeIcons.check,
+                                                                                  color: Colors.white,
+                                                                                  size: 14.0,
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 6.0),
+                                                                              Container(
+                                                                                child: Column(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                                  children: <Widget>[
+                                                                                    Text(
+                                                                                      widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["jabatan_name"],
+                                                                                      style: TextStyle(fontSize: 14.0),
+                                                                                    ),
+                                                                                    Text(
+                                                                                      widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "0" ? "Belum Diproses" : widget.treePosition[i]["child"][i2]["child"][i3]["child"][i4]["child"][i5]["disposisi_status"] == "1" ? "Disposisi Kebawah" : "Selesai",
+                                                                                      style: TextStyle(fontSize: 12.0),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                )
+                                                        ],
+                                                      );
+                                                    },
+                                                  )
+                                          ],
+                                        );
+                                      },
+                                    )
+                            ],
+                          );
+                        },
+                      )
+              ],
+            );
+          },
+        )),
         Divider(),
         Text("Instruksi Untuk Anda : ${widget.instruksi}"),
         SizedBox(height: 10.0),
@@ -401,12 +522,14 @@ class _HistoryMailInState extends State<HistoryMailIn> {
           child: Row(
             children: <Widget>[
               FutureBuilder(
-                future: getDataTujuanMailIn(jabatanId, widget.disposisiId, widget.suratId),
-                builder: (context, snap){
-                  if(snap.hasData){
-                    if(snap.data["status"]){
-                      return  MaterialButton(
-                        onPressed: () {
+                future: getDataTujuanMailIn(
+                    jabatanId, widget.disposisiId, widget.suratId),
+                builder: (context, snap) {
+                  if (snap.hasData) {
+                    if (snap.data["status"]) {
+                      if (widget.statusDisposisi == "0") {
+                        return MaterialButton(
+                          onPressed: () {
                             Navigator.of(context).push(CupertinoPageRoute(
                                 builder: (context) => AddMailInDisposisi(
                                       idJabatan: jabatanId,
@@ -420,12 +543,16 @@ class _HistoryMailInState extends State<HistoryMailIn> {
                           color: Colors.cyan,
                           child: Text("Buat Disposisi",
                               style: TextStyle(
-                                  color: Colors.white, fontWeight: FontWeight.bold)),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
                         );
-                    }else{
+                      } else {
+                        return Container();
+                      }
+                    } else {
                       return Container();
                     }
-                  }else{
+                  } else {
                     return Container();
                   }
                 },
@@ -434,39 +561,40 @@ class _HistoryMailInState extends State<HistoryMailIn> {
               MaterialButton(
                 onPressed: () {
                   showCupertinoDialog(
-                    context: context,
-                    builder: (context){
-                      return FutureBuilder(
-                        future: selesaikanDisposisiMasukData(widget.disposisiId, "2"),
-                        builder: (context, snap){
-                          if(snap.hasData){
-                            return CupertinoAlertDialog(
-                              title: Text("Selesaikan Disposisi"),
-                              content: Container(
-                                padding: EdgeInsets.all(20.0),
-                                child: Text(snap.data["message"]),
-                              ),
-                              actions: <Widget>[
-                                MaterialButton(
-                                  onPressed: (){
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    // sendNotification();
-                                    displayNotification("Selesaikan Surat", "Berhasil Menyelesaikan Surat");
-                                  },
-                                  color: Colors.amber[600],
-                                  child: Text("Tutup", style: TextStyle(color: Colors.white)),
-                                )
-                              ],
-                            );
-                          }else{
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        },
-                      );
-                    }
-                  );
-                
+                      context: context,
+                      builder: (context) {
+                        return FutureBuilder(
+                          future: selesaikanDisposisiMasukData(
+                              widget.disposisiId, "2"),
+                          builder: (context, snap) {
+                            if (snap.hasData) {
+                              return CupertinoAlertDialog(
+                                title: Text("Selesaikan Disposisi"),
+                                content: Container(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Text(snap.data["message"]),
+                                ),
+                                actions: <Widget>[
+                                  MaterialButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      // sendNotification();
+                                      displayNotification("Selesaikan Surat",
+                                          "Berhasil Menyelesaikan Surat");
+                                    },
+                                    color: Colors.amber[600],
+                                    child: Text("Tutup",
+                                        style: TextStyle(color: Colors.white)),
+                                  )
+                                ],
+                              );
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          },
+                        );
+                      });
                 },
                 color: Colors.green,
                 child: Text("Selesai",

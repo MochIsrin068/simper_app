@@ -172,6 +172,7 @@ class _DetailMailInState extends State<DetailMailIn> {
                                     ["suratmasuk_noagenda"],
                                 tglTerima: snapshot.data["data"][0]
                                     ["suratmasuk_tanggalterima"],
+                                statusDisposisi: snapshot.data["data"][0]["disposisi_status"],
                               ),
                       )
                     ],
