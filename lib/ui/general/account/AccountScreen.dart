@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -59,6 +60,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
     _firebaseMessaging.unsubscribeFromTopic(_id);
     print("UNSubscripe : $_id");
+    removeAllNotif();
 
 
     // _firebaseMessaging.configure(
@@ -251,5 +253,16 @@ class _AccountScreenState extends State<AccountScreen> {
             )
           ],
         ));
+  }
+
+  removeAllNotif() async {
+    print("Clear Notif");
+    print(_id);
+
+    Firestore.instance.collection(_id).getDocuments().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.documents) {
+        ds.reference.delete();
+      }
+    });
   }
 }

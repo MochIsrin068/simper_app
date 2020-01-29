@@ -80,7 +80,7 @@ class _DetailDispositionState extends State<DetailDispositionSelesai> {
                             ),
                             IconButton(
                               icon: Icon(_isDocument
-                                  ? FontAwesomeIcons.history
+                                  ? FontAwesomeIcons.list
                                   : FontAwesomeIcons.file),
                               onPressed: () {
                                 setState(() {

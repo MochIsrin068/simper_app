@@ -8,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/detailDispositionIn.dart';
+import 'package:simper_app/model/disposisiMasuk.dart';
 import 'package:simper_app/model/loginModel.dart';
 import 'package:simper_app/model/newsMail.dart';
 import 'package:simper_app/ui/general/notification/notifCard.dart';
@@ -257,43 +258,77 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                         size: 28,
                         color: Colors.black.withOpacity(0.5),
                       )
-                    : StreamBuilder(
-                        stream: Firestore.instance.collection(_id).snapshots(),
+                    : FutureBuilder(
+                        future: disposisiMasukData(_id),
                         builder: (context, snapshot) {
-                          if (snapshot.data != null) {
-                            return Badge(
-                              position:
-                                  BadgePosition.topRight(top: 0, right: 3),
-                              animationDuration: Duration(milliseconds: 300),
-                              animationType: BadgeAnimationType.slide,
-                              badgeContent: Text(
-                                snapshot.data.documents.length.toString(),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              child: IconButton(
-                                icon: Icon(
-                                  FontAwesomeIcons.solidBell,
-                                  size: 28,
-                                  color: Colors.black.withOpacity(0.5),
+                          if (snapshot.hasData) {
+                            if (snapshot.data["status"]) {
+                              return Badge(
+                                position:
+                                    BadgePosition.topRight(top: 0, right: 3),
+                                animationDuration: Duration(milliseconds: 300),
+                                animationType: BadgeAnimationType.slide,
+                                badgeContent: Text(
+                                  snapshot.data["data"].length.toString(),
+                                  style: TextStyle(color: Colors.white),
                                 ),
-                                onPressed: () {
-                                  Navigator.of(context).push(CupertinoPageRoute(
-                                      settings:
-                                          RouteSettings(isInitialRoute: true),
-                                      builder: (context) => NotifScreen(
-                                          collectionID: _id,
-                                          dataNotif: snapshot.data.documents)));
-                                },
-                              ),
-                            );
+                                child: IconButton(
+                                  icon: Icon(
+                                    FontAwesomeIcons.solidBell,
+                                    size: 28,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                  onPressed: () {
+                                    // Navigator.of(context).push(CupertinoPageRoute(
+                                    //     settings:
+                                    //         RouteSettings(isInitialRoute: true),
+                                    //     builder: (context) => NotifScreen(
+                                    //         collectionID: _id,
+                                    //         dataNotif: snapshot.data.documents)));
+                                  },
+                                ),
+                              );
+                            }else{
+                              return Badge(
+                                position:
+                                    BadgePosition.topRight(top: 0, right: 3),
+                                animationDuration: Duration(milliseconds: 300),
+                                animationType: BadgeAnimationType.slide,
+                                badgeContent: Text(
+                                  0.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                child: IconButton(
+                                  icon: Icon(
+                                    FontAwesomeIcons.solidBell,
+                                    size: 28,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                  onPressed: () {
+                                  },
+                                ),
+                              );
+                            }
                           } else {
-                            return IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  FontAwesomeIcons.solidBell,
-                                  size: 28,
-                                  color: Colors.black.withOpacity(0.5),
-                                ));
+                            return Badge(
+                                position:
+                                    BadgePosition.topRight(top: 0, right: 3),
+                                animationDuration: Duration(milliseconds: 300),
+                                animationType: BadgeAnimationType.slide,
+                                badgeContent: Text(
+                                  0.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                child: IconButton(
+                                  icon: Icon(
+                                    FontAwesomeIcons.solidBell,
+                                    size: 28,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                  onPressed: () {
+                                  },
+                                ),
+                              );
                           }
                         }),
                 // IconButton(

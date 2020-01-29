@@ -80,7 +80,7 @@ class _DetailDispositionState extends State<DetailMailEnd> {
                             ),
                             IconButton(
                               icon: Icon(_isDocument
-                                  ? FontAwesomeIcons.history
+                                  ? FontAwesomeIcons.list
                                   : FontAwesomeIcons.file),
                               onPressed: () {
                                 setState(() {

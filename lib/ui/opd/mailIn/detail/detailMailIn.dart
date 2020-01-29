@@ -112,7 +112,7 @@ class _DetailMailInState extends State<DetailMailIn> {
                             ),
                             IconButton(
                               icon: Icon(_isDocument
-                                  ? FontAwesomeIcons.history
+                                  ? FontAwesomeIcons.list
                                   : FontAwesomeIcons.file),
                               onPressed: () {
                                 setState(() {
@@ -162,8 +162,7 @@ class _DetailMailInState extends State<DetailMailIn> {
                                 treePosition: snapshot.data["tree"],
                                 instruksi: snapshot.data["data"][0]
                                     ["disposisi_instruksi"],
-                                disposisiId: snapshot.data["data"][0]
-                                    ["disposisi_id"],
+                                disposisiId: widget.disposisiId,
                                 suratId: snapshot.data["data"][0]
                                     ["suratmasuk_id"],
                                 skpdPengirim: snapshot.data["data"][0]

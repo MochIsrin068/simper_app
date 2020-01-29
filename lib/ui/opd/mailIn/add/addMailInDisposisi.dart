@@ -75,14 +75,14 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
   final List<Map> dispositionCommand = [];
 
   // ADD DATA TO FIRESTORE
-  _createData() async {
+  _createData(List dataTujuanDisposisi) async {
     for (var i = 0; i < dispositionCommand.length; i++) {
       final document = Firestore.instance
           .collection(dispositionCommand[i]["userTujuan"])
           .document(dispositionCommand[i]["idSurat"]);
 
       Map<String, dynamic> data = {
-        'idDisposisi': dispositionCommand[i]["idDisposisi"],
+        'idDisposisi': dataTujuanDisposisi[i]["disposisi_id"],
         'title': dispositionCommand[i]["title"],
         'noAgenda': dispositionCommand[i]["noAgenda"],
         'skpdPengirim': dispositionCommand[i]["skpdPengirim"],
@@ -221,6 +221,11 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                         builder: (context, command, _) {
                                           return MaterialButton(
                                             onPressed: () {
+                                              print(
+                                                  "Awal api : $dataDisposisi");
+                                              print(
+                                                  "Awal firebase : $dispositionCommand");
+
                                               setState(() {
                                                 dataDisposisi.addAll({
                                                   "id_surat[]${snap.data["data"][i]["id"]}":
@@ -256,8 +261,10 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                                       widget.tglMenerima
                                                 });
                                               });
-                                              print(dataDisposisi);
-                                              print(dispositionCommand);
+                                              print(
+                                                  "Awal api 2 : $dataDisposisi");
+                                              print(
+                                                  "Awal firebase 2 : $dispositionCommand");
                                               Navigator.of(context).pop();
                                             },
                                             color: Colors.amber[600],
@@ -270,6 +277,26 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                     ],
                                   );
                                 });
+                          } else {
+                            dataDisposisi.remove(
+                                "id_surat[]${snap.data["data"][i]["id"]}");
+                            dataDisposisi.remove(
+                                "jabatan_asal[]${snap.data["data"][i]["id"]}");
+                            dataDisposisi.remove(
+                                "jabatan_tujuan[]${snap.data["data"][i]["id"]}");
+                            dataDisposisi.remove(
+                                "user_asal[]${snap.data["data"][i]["id"]}");
+                            dataDisposisi.remove(
+                                "user_tujuan[]${snap.data["data"][i]["id"]}");
+                            dataDisposisi.remove(
+                                "instruksi[]${snap.data["data"][i]["id"]}");
+                            dataDisposisi.remove(
+                                "disposisi_id[]${snap.data["data"][i]["id"]}");
+
+                            dispositionCommand.removeAt(i);
+
+                            print("Awal api 3 : $dataDisposisi");
+                            print("Awal firebase 3 : $dispositionCommand");
                           }
                           setState(() {
                             _valueOfData[i] = newValue;
@@ -327,7 +354,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                               print("snapshot : ${snap.data}");
                               print("data : $addDisposition");
 
-                              _createData();
+                              _createData(snap.data["data"]);
 
                               return CupertinoAlertDialog(
                                 title: Text("Status Disposisi"),

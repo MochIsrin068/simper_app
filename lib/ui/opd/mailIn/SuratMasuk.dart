@@ -74,6 +74,7 @@ class _SuratMasukState extends State<SuratMasuk> {
         if (snapshot.hasData) {
           if (snapshot.data["data"] == null) {
             return Container(
+                height: MediaQuery.of(context).size.height / 5,
                 padding: EdgeInsets.all(20.0),
                 width: MediaQuery.of(context).size.width,
                 color: Colors.grey[100],
