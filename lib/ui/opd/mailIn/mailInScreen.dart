@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simper_app/ui/general/notification/detailMailInNotif.dart';
+import 'package:simper_app/ui/opd/mailIn/detail/detailMailIn.dart';
 import 'SuratMasuk.dart';
 import 'SuratMasukSelesai.dart';
 
@@ -53,6 +55,11 @@ class _MailInScreenState extends State<MailInScreen>
             message['notification']['title'], message['notification']['body']);
 
         // addBadge();
+      },
+      onBackgroundMessage: (Map<String, dynamic> message) async {
+        print("onBackgroundMessage: $message");
+        await displayNotification(
+            message['notification']['title'], message['notification']['body']);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -105,10 +112,17 @@ class _MailInScreenState extends State<MailInScreen>
   Future onSelectNotification(String payload) async {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              DetailMailInNotif(disposisiId: "$payload")));
     }
   }
 
   Future displayNotification(String title, String body) async {
+    var getExtenstion = body.split("/");
+    String fileExtenstion = getExtenstion[1];
+
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
         importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
@@ -116,8 +130,8 @@ class _MailInScreenState extends State<MailInScreen>
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
-        0, '$title', '$body', platformChannelSpecifics,
-        payload: 'Items Here');
+        0, '$title', '${getExtenstion[0]}', platformChannelSpecifics,
+        payload: fileExtenstion);
   }
 
   @override

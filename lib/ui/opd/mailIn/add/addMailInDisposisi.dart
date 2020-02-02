@@ -100,7 +100,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
       print("Subscripe Tujuan Notif : ${dispositionCommand[i]["userTujuan"]}");
       final response = await MessagingDisposisi.sendToAll(
           title: "Surat Masuk Disposisi",
-          body: dispositionCommand[i]["skpdPengirim"],
+          body: "${dispositionCommand[i]["skpdPengirim"]}/${dispositionCommand[i]["idDisposisi"]}",
           speceficttopic: dispositionCommand[i]["userTujuan"]
           // fcmToken: fcmToken,
           );
@@ -177,6 +177,9 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                           _tujuanDisposisi = snap.data["perintah"];
 
                           if (_valueOfData[i] == false) {
+                            setState(() {
+                              _valueOfData[i] = true;
+                            });
                             showCupertinoDialog(
                                 context: context,
                                 builder: (context) {
@@ -278,6 +281,9 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                   );
                                 });
                           } else {
+                            setState(() {
+                              _valueOfData[i] = false;
+                            });
                             dataDisposisi.remove(
                                 "id_surat[]${snap.data["data"][i]["id"]}");
                             dataDisposisi.remove(
@@ -298,9 +304,9 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                             print("Awal api 3 : $dataDisposisi");
                             print("Awal firebase 3 : $dispositionCommand");
                           }
-                          setState(() {
-                            _valueOfData[i] = newValue;
-                          });
+                          // setState(() {
+                          //   _valueOfData[i] = newValue;
+                          // });
                         },
                         value: _valueOfData[i],
                         title: Text(snap.data["data"][i]["first_name"],

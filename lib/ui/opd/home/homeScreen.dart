@@ -11,6 +11,7 @@ import 'package:simper_app/model/detailDispositionIn.dart';
 import 'package:simper_app/model/disposisiMasuk.dart';
 import 'package:simper_app/model/loginModel.dart';
 import 'package:simper_app/model/newsMail.dart';
+import 'package:simper_app/ui/general/notification/detailMailInNotif.dart';
 import 'package:simper_app/ui/general/notification/notifCard.dart';
 import 'package:simper_app/ui/general/notification/notifScreen.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
@@ -18,6 +19,7 @@ import 'package:simper_app/ui/opd/allMail/allMailDisposisioned.dart';
 import 'package:simper_app/ui/opd/allMail/allMailIn.dart';
 import 'package:simper_app/ui/opd/allMail/allMailInEnd.dart';
 import 'package:simper_app/ui/opd/mailIn/ListTileSuratMasukCard.dart';
+import 'package:simper_app/ui/opd/mailIn/detail/detailMailIn.dart';
 
 import 'homeComponents.dart';
 
@@ -127,6 +129,11 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
 
         // addBadge();
       },
+      onBackgroundMessage: (Map<String, dynamic> message) async {
+        print("onBackgroundMessage: $message");
+        await displayNotification(
+            message['notification']['title'], message['notification']['body']);
+      },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
         await displayNotification(
@@ -188,17 +195,17 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
       debugPrint('notification payload: ' + payload);
     }
 
-    // showDialog(
-    //     context: context,
-    //     builder: (context) {
-    //       return CupertinoAlertDialog(
-    //         title: Text("Onseledted"),
-    //         content: Text("On SElected"),
-    //       );
-    //     });
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              DetailMailInNotif(disposisiId: "$payload")));
   }
 
   Future displayNotification(String title, String body) async {
+
+    var getExtenstion = body.split("/");
+    String fileExtenstion = getExtenstion[1];
+
+
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
         importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
@@ -206,8 +213,8 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
-        0, '$title', '$body', platformChannelSpecifics,
-        payload: 'Items Here');
+        0, '$title', '${getExtenstion[0]}', platformChannelSpecifics,
+        payload: fileExtenstion);
   }
 
   @override
@@ -288,7 +295,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                                   },
                                 ),
                               );
-                            }else{
+                            } else {
                               return Badge(
                                 position:
                                     BadgePosition.topRight(top: 0, right: 3),
@@ -304,31 +311,29 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                                     size: 28,
                                     color: Colors.black.withOpacity(0.5),
                                   ),
-                                  onPressed: () {
-                                  },
+                                  onPressed: () {},
                                 ),
                               );
                             }
                           } else {
                             return Badge(
-                                position:
-                                    BadgePosition.topRight(top: 0, right: 3),
-                                animationDuration: Duration(milliseconds: 300),
-                                animationType: BadgeAnimationType.slide,
-                                badgeContent: Text(
-                                  0.toString(),
-                                  style: TextStyle(color: Colors.white),
+                              position:
+                                  BadgePosition.topRight(top: 0, right: 3),
+                              animationDuration: Duration(milliseconds: 300),
+                              animationType: BadgeAnimationType.slide,
+                              badgeContent: Text(
+                                0.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  FontAwesomeIcons.solidBell,
+                                  size: 28,
+                                  color: Colors.black.withOpacity(0.5),
                                 ),
-                                child: IconButton(
-                                  icon: Icon(
-                                    FontAwesomeIcons.solidBell,
-                                    size: 28,
-                                    color: Colors.black.withOpacity(0.5),
-                                  ),
-                                  onPressed: () {
-                                  },
-                                ),
-                              );
+                                onPressed: () {},
+                              ),
+                            );
                           }
                         }),
                 // IconButton(

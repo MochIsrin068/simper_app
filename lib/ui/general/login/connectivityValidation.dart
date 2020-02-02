@@ -176,6 +176,7 @@ Future getConnection(
                 dataLogin["data"][0]["id"],
                 dataLogin["data"][0]["username"],
                 dataLogin["data"][0]["group_id"]);
+            Navigator.of(context).pop();
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => NavigationBarOpd(
                   username: username,
