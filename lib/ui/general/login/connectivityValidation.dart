@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/loginModel.dart';
-import 'package:simper_app/ui/admin/home/navigationBar.dart';
 import 'package:simper_app/ui/opd/home/navigationBar.dart';
 
 Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
@@ -34,47 +32,47 @@ _getTokenNotif() {
 
 // SET DATA TO FIRESTORE
 
-var snapshotData;
+// var snapshotData;
 
-getDataFirestore(String id) {
-  Firestore.instance
-      .collection('users')
-      .document(id)
-      .get()
-      .then((DocumentSnapshot ds) {
-    print(ds);
-    snapshotData = ds;
-    print(snapshotData);
-  });
-}
+// getDataFirestore(String id) {
+//   Firestore.instance
+//       .collection('users')
+//       .document(id)
+//       .get()
+//       .then((DocumentSnapshot ds) {
+//     print(ds);
+//     snapshotData = ds;
+//     print(snapshotData);
+//   });
+// }
 
-createData(String id, String username, String groupId) {
-  final document = Firestore.instance.collection('users').document(id);
+// createData(String id, String username, String groupId) {
+//   final document = Firestore.instance.collection('users').document(id);
 
-  Map<String, dynamic> data = {
-    'id': id,
-    'token': myToken,
-    'username': username,
-    'group_id': groupId
-  };
+//   Map<String, dynamic> data = {
+//     'id': id,
+//     'token': myToken,
+//     'username': username,
+//     'group_id': groupId
+//   };
 
-  // getData
-  if (snapshotData == null) {
-    document.setData(data).whenComplete(() {
-      print("Data Berhasil Disimpan");
-      return SnackBar(
-        content: Text("data sudah ditambahkan"),
-      );
-    });
-  }else{
-    document.updateData(data).whenComplete(() {
-      print("Data Berhasil Di Update");
-      return SnackBar(
-        content: Text("data sudah DI UPDATE"),
-      );
-    });
-  }
-}
+//   // getData
+//   if (snapshotData == null) {
+//     document.setData(data).whenComplete(() {
+//       print("Data Berhasil Disimpan");
+//       return SnackBar(
+//         content: Text("data sudah ditambahkan"),
+//       );
+//     });
+//   }else{
+//     document.updateData(data).whenComplete(() {
+//       print("Data Berhasil Di Update");
+//       return SnackBar(
+//         content: Text("data sudah DI UPDATE"),
+//       );
+//     });
+//   }
+// }
 
 Future getConnection(
     BuildContext context, String username, String password) async {
@@ -172,10 +170,10 @@ Future getConnection(
         await _getTokenNotif();
         void directly() {
           if (dataLogin["data"][0]["group_id"] == "5") {
-            createData(
-                dataLogin["data"][0]["id"],
-                dataLogin["data"][0]["username"],
-                dataLogin["data"][0]["group_id"]);
+            // createData(
+            //     dataLogin["data"][0]["id"],
+            //     dataLogin["data"][0]["username"],
+            //     dataLogin["data"][0]["group_id"]);
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => NavigationBarOpd(

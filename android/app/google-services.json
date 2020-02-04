@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "550543393811",
-    "firebase_url": "https://simper-19156.firebaseio.com",
-    "project_id": "simper-19156",
-    "storage_bucket": "simper-19156.appspot.com"
+    "project_number": "120554205349",
+    "firebase_url": "https://simper-kendari.firebaseio.com",
+    "project_id": "simper-kendari",
+    "storage_bucket": "simper-kendari.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:550543393811:android:ab6a957137c0442298abe6",
+        "mobilesdk_app_id": "1:120554205349:android:0828af55699d79391d1d4c",
         "android_client_info": {
-          "package_name": "com.example.simper_app"
+          "package_name": "com.technosstudio.simper_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "550543393811-5h9gmhiq2ltqnapr1oon8jk8a0bkcdbj.apps.googleusercontent.com",
+          "client_id": "120554205349-2jq54u3g96k8j23uo1ttpu48p4m81q2m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB-W2yku-n93wpnvyRgulHmOR_lIKznn5k"
+          "current_key": "AIzaSyBP1Rfc-KQQ6atWjmeE2s4TS_KMchi-Z78"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "550543393811-5h9gmhiq2ltqnapr1oon8jk8a0bkcdbj.apps.googleusercontent.com",
+              "client_id": "120554205349-2jq54u3g96k8j23uo1ttpu48p4m81q2m.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

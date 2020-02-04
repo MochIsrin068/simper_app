@@ -193,18 +193,15 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
     // await removeBadge();
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
-    }
 
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              DetailMailInNotif(disposisiId: "$payload")));
+          builder: (context) => DetailMailInNotif(disposisiId: "$payload")));
+    }
   }
 
   Future displayNotification(String title, String body) async {
-
     var getExtenstion = body.split("/");
     String fileExtenstion = getExtenstion[1];
-
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',

@@ -1,4 +1,4 @@
-package com.example.simper_app
+package com.technosstudio.simper_app
 
 import android.os.Bundle
 

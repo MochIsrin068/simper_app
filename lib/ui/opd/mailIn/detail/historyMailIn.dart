@@ -47,10 +47,63 @@ class _HistoryMailInState extends State<HistoryMailIn> {
     setState(() {});
   }
 
+  getNotif() {
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = IOSInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
+  }
+
+  // SHOW NOTIF IOS AND ANDROID
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => new CupertinoAlertDialog(
+        title: new Text(title),
+        content: new Text(body),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: new Text('Ok'),
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future onSelectNotification(String payload) async {
+    // await removeBadge();
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+  }
+
+  Future displayNotifications(String title, String body) async {
+    print("Local Notif From Selesai Button");
+
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'history id', 'history channel', 'history channel desc',
+        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, '$title', '$body', platformChannelSpecifics, payload: "seleikan surat");
+  }
+
   @override
   void initState() {
     super.initState();
     getIdJabatan();
+    getNotif();
   }
 
   @override
@@ -553,7 +606,15 @@ class _HistoryMailInState extends State<HistoryMailIn> {
                       return Container();
                     }
                   } else {
-                    return Container();
+                    return MaterialButton(
+                          onPressed: () {
+                          },
+                          color: Colors.cyan[200],
+                          child: Text("Loading...",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                        );
                   }
                 },
               ),
@@ -576,12 +637,11 @@ class _HistoryMailInState extends State<HistoryMailIn> {
                                 ),
                                 actions: <Widget>[
                                   MaterialButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                      // sendNotification();
-                                      displayNotification("Selesaikan Surat",
+                                    onPressed: (){
+                                      displayNotifications("Selesaikan Surat",
                                           "Berhasil Menyelesaikan Surat");
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
                                     },
                                     color: Colors.amber[600],
                                     child: Text("Tutup",
@@ -607,32 +667,4 @@ class _HistoryMailInState extends State<HistoryMailIn> {
       ],
     ));
   }
-
-  Future displayNotification(String title, String body) async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0, '$title', '$body', platformChannelSpecifics,
-        payload: 'Items Here');
-  }
-
-  // SEND NOTIFICATIONS
-  // Future sendNotification() async {
-  //   print("Data Ini Subscripe Notif : $userId");
-  //   final response = await MessagingHistory.sendToAll(
-  //       title: "Notifikasi", body: "Berhasil Menyelesaikan Surat", speceficttopic: userId
-  //       // fcmToken: fcmToken,
-  //       );
-
-  //   if (response.statusCode != 200) {
-  //     Scaffold.of(context).showSnackBar(SnackBar(
-  //       content:
-  //           Text('[${response.statusCode}] Error message: ${response.body}'),
-  //     ));
-  //   }
-  // }
 }
