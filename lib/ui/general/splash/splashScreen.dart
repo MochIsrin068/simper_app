@@ -58,8 +58,8 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Image.asset(
           'assets/images/simper.png',
-          width: 110.0,
-          height: 110.0,
+          width: 75.0,
+          height: 75.0,
         ),
       ),
     );
