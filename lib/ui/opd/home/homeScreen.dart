@@ -13,6 +13,7 @@ import 'package:simper_app/model/detailDispositionIn.dart';
 import 'package:simper_app/model/disposisiMasuk.dart';
 import 'package:simper_app/model/loginModel.dart';
 import 'package:simper_app/model/newsMail.dart';
+import 'package:simper_app/model/suratTerdisposisi.dart';
 import 'package:simper_app/ui/general/notification/detailMailInNotif.dart';
 import 'package:simper_app/ui/general/notification/notifCard.dart';
 import 'package:simper_app/ui/general/notification/notifScreen.dart';
@@ -364,10 +365,12 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                 }));
               },
               child: FutureBuilder(
-                future: loginData(widget.username, widget.password),
+                future: disposisiMasukData(_id),
                 builder: (context, snap) {
-                  return snap.hasData
-                      ? HomeComponents(
+                  // print(snap.data["data"]);
+                  if(snap.hasData){
+                    if (snap.data["status"]) {
+                      return HomeComponents(
                           icon: Icon(
                             Icons.mail_outline,
                             size: 60.0,
@@ -375,10 +378,25 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           ),
                           primarycolor: Colors.amber,
                           secondcolor: Colors.amber[600],
-                          count: snap.data["widget"][0]["widget_suratmasuk"],
+                          count: snap.data["data"].length.toString(),
                           title: "Surat Masuk",
-                        )
-                      : ShimmerHomeCard();
+                        );
+                    }else{
+                      return HomeComponents(
+                          icon: Icon(
+                            Icons.mail_outline,
+                            size: 60.0,
+                            color: Colors.white,
+                          ),
+                          primarycolor: Colors.amber,
+                          secondcolor: Colors.amber[600],
+                          count: 0.toString(),
+                          title: "Surat Masuk",
+                        );
+                    }
+                  }else{
+                    return ShimmerHomeCard();
+                  }
                 },
               )),
           SizedBox(height: 10.0),
@@ -390,32 +408,38 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                 }));
               },
               child: FutureBuilder(
-                future: loginData(widget.username, widget.password),
+                future: suratTerdisposisiData(_id),
                 builder: (context, snap) {
-                  return snap.hasData
-                      ? HomeComponents(
+                  // print(snap.data["data"]);
+                  if(snap.hasData){
+                    if (snap.data["status"]) {
+                      return HomeComponents(
                           icon: Icon(
-                            Icons.done_all,
+                            Icons.mail_outline,
                             size: 60.0,
                             color: Colors.white,
                           ),
                           primarycolor: Colors.green[400],
                           secondcolor: Colors.green,
-                          count: snap.data["widget"][0]["widget_suratkeluar"],
-                          title: "Surat Masuk Disposisi",
-                        )
-                      : ShimmerHomeCard();
-                      // : HomeComponents(
-                      //     icon: Icon(
-                      //       Icons.done_all,
-                      //       size: 60.0,
-                      //       color: Colors.white,
-                      //     ),
-                      //     primarycolor: Colors.green[400],
-                      //     secondcolor: Colors.green,
-                      //     count: "$_suratKeluar",
-                      //     title: "Surat Masuk Disposisi",
-                      //   );
+                          count: snap.data["data"].length.toString(),
+                          title: "Surat Masuk",
+                        );
+                    }else{
+                      return HomeComponents(
+                          icon: Icon(
+                            Icons.mail_outline,
+                            size: 60.0,
+                            color: Colors.white,
+                          ),
+                          primarycolor: Colors.green[400],
+                          secondcolor: Colors.green,
+                          count: 0.toString(),
+                          title: "Surat Masuk",
+                        );
+                    }
+                  }else{
+                    return ShimmerHomeCard();
+                  }
                 },
               )),
           // SizedBox(height: 10.0),
