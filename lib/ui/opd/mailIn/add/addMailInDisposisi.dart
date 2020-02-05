@@ -37,6 +37,8 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
   String jabatanId;
   String userId;
 
+  TextEditingController _textEditingController = TextEditingController();
+
   getIdJabatan() async {
     final sha = await _sharedPref;
     jabatanId = sha.getString('jabatan_id');
@@ -237,37 +239,62 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                     //     borderRadius:
                                     //         BorderRadius.circular(10.0)),
                                     title: Text("Perintah Disposisi"),
-                                    content: Container(
-                                        decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Colors.grey)),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 4.0),
-                                        child: DropdownButtonHideUnderline(
-                                            child: Consumer<
-                                                ChangeCommandDisposistion>(
-                                          builder: (context, command, _) {
-                                            return DropdownButton(
-                                                hint: Text("Pilih Item"),
-                                                value: command.value,
-                                                onChanged: (newValue) {
-                                                  print(command.value);
-                                                  command.value = newValue;
-                                                  print(command.value);
-                                                },
-                                                items: _tujuanDisposisi
-                                                    .map((value) {
-                                                  return DropdownMenuItem(
-                                                    value: value,
-                                                    child: Text(value,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontSize: 10.0)),
-                                                  );
-                                                }).toList());
-                                          },
-                                        ))),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Container(
+                                            width: MediaQuery.of(context).size.width,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.grey)),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: DropdownButtonHideUnderline(
+                                                child: Consumer<
+                                                    ChangeCommandDisposistion>(
+                                              builder: (context, command, _) {
+                                                return DropdownButton(
+                                                    hint: Text("Pilih Item"),
+                                                    value: command.value,
+                                                    onChanged: (newValue) {
+                                                      print(command.value);
+                                                      command.value = newValue;
+                                                      print(command.value);
+                                                    },
+                                                    items: _tujuanDisposisi
+                                                        .map((value) {
+                                                      return DropdownMenuItem(
+                                                        value: value,
+                                                        child: Text(value,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontSize:
+                                                                    10.0)),
+                                                      );
+                                                    }).toList());
+                                              },
+                                            ))),
+                                        SizedBox(height: 10.0),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey)),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 4.0),
+                                          child: TextField(
+                                            controller: _textEditingController,
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText: "Instruksi Tambahan",
+                                                hintStyle: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 10.0)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                     actions: <Widget>[
                                       Consumer<ChangeCommandDisposistion>(
                                         builder: (context, command, _) {
@@ -293,9 +320,9 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                                       snap.data["data"][i]
                                                           ["id"],
                                                   "instruksi[]${snap.data["data"][i]["id"]}":
-                                                      command.value,
+                                                      "${command.value}, ${_textEditingController.text}",
                                                   "disposisi_id[]${snap.data["data"][i]["id"]}":
-                                                      snap.data["id_disposisi"]
+                                                      snap.data["id_disposisi"],
                                                 });
 
                                                 dispositionCommand.add({
@@ -347,6 +374,8 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                 "instruksi[]${snap.data["data"][i]["id"]}");
                             dataDisposisi.remove(
                                 "disposisi_id[]${snap.data["data"][i]["id"]}");
+
+                            _textEditingController.clear();
 
                             dispositionCommand.removeAt(i);
 

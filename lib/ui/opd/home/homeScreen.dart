@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -14,6 +16,7 @@ import 'package:simper_app/model/newsMail.dart';
 import 'package:simper_app/ui/general/notification/detailMailInNotif.dart';
 import 'package:simper_app/ui/general/notification/notifCard.dart';
 import 'package:simper_app/ui/general/notification/notifScreen.dart';
+import 'package:simper_app/ui/general/shimmer/shimmerHomeCard.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
 import 'package:simper_app/ui/opd/allMail/allMailDisposisioned.dart';
 import 'package:simper_app/ui/opd/allMail/allMailIn.dart';
@@ -129,10 +132,17 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
 
         // addBadge();
       },
-      onBackgroundMessage: (Map<String, dynamic> message) async {
+      onBackgroundMessage: Platform.isIOS ? null : (Map<String, dynamic> message) async {
         print("onBackgroundMessage: $message");
-        await displayNotification(
-            message['notification']['title'], message['notification']['body']);
+        if (message.containsKey('data')) {
+          await displayNotification(message['data']['title'],
+              message['data']['body']);
+        }
+
+        if (message.containsKey('notification')) {
+          await displayNotification(message['notification']['title'],
+              message['notification']['body']);
+        }
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -368,17 +378,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           count: snap.data["widget"][0]["widget_suratmasuk"],
                           title: "Surat Masuk",
                         )
-                      : HomeComponents(
-                          icon: Icon(
-                            Icons.mail_outline,
-                            size: 60.0,
-                            color: Colors.white,
-                          ),
-                          primarycolor: Colors.amber,
-                          secondcolor: Colors.amber[600],
-                          count: "$_suratMasuk",
-                          title: "Surat Masuk",
-                        );
+                      : ShimmerHomeCard();
                 },
               )),
           SizedBox(height: 10.0),
@@ -404,17 +404,18 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           count: snap.data["widget"][0]["widget_suratkeluar"],
                           title: "Surat Masuk Disposisi",
                         )
-                      : HomeComponents(
-                          icon: Icon(
-                            Icons.done_all,
-                            size: 60.0,
-                            color: Colors.white,
-                          ),
-                          primarycolor: Colors.green[400],
-                          secondcolor: Colors.green,
-                          count: "$_suratKeluar",
-                          title: "Surat Masuk Disposisi",
-                        );
+                      : ShimmerHomeCard();
+                      // : HomeComponents(
+                      //     icon: Icon(
+                      //       Icons.done_all,
+                      //       size: 60.0,
+                      //       color: Colors.white,
+                      //     ),
+                      //     primarycolor: Colors.green[400],
+                      //     secondcolor: Colors.green,
+                      //     count: "$_suratKeluar",
+                      //     title: "Surat Masuk Disposisi",
+                      //   );
                 },
               )),
           // SizedBox(height: 10.0),

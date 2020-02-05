@@ -12,7 +12,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Simper Umum"
+        android:label="SIMPER"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
