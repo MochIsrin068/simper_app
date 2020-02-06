@@ -320,7 +320,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                                       snap.data["data"][i]
                                                           ["id"],
                                                   "instruksi[]${snap.data["data"][i]["id"]}":
-                                                      "${command.value}, ${_textEditingController.text}",
+                                                      "${command.value},${_textEditingController.text}",
                                                   "disposisi_id[]${snap.data["data"][i]["id"]}":
                                                       snap.data["id_disposisi"],
                                                 });

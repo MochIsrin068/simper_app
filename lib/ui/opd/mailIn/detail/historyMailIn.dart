@@ -104,6 +104,8 @@ class _HistoryMailInState extends State<HistoryMailIn> {
     super.initState();
     getIdJabatan();
     getNotif();
+    print("-"+widget.instruksi.split(",")[1]+"-");
+
   }
 
   @override
@@ -569,7 +571,20 @@ class _HistoryMailInState extends State<HistoryMailIn> {
           },
         )),
         Divider(),
-        Text("Instruksi Untuk Anda : ${widget.instruksi}"),
+        Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text("Instruksi Untuk Anda : "),
+              Divider(),
+              Text( widget.instruksi.split(",") == null ? "" : "- ${widget.instruksi.split(",")[0]}",  style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 4.0),
+              Text(( widget.instruksi.split(",").length == 1 || widget.instruksi.split(",")[1] == "  " || widget.instruksi.split(",")[1] == " " || widget.instruksi.split(",")[1] == null) ? "" : "- ${widget.instruksi.split(",")[1]}",  style: TextStyle(fontWeight: FontWeight.bold))
+            ],
+          ),
+        ),
         SizedBox(height: 10.0),
         Container(
           child: Row(

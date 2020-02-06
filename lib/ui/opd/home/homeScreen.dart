@@ -422,7 +422,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           primarycolor: Colors.green[400],
                           secondcolor: Colors.green,
                           count: snap.data["data"].length.toString(),
-                          title: "Surat Masuk",
+                          title: "Surat Masuk Disposisi",
                         );
                     }else{
                       return HomeComponents(
@@ -434,7 +434,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           primarycolor: Colors.green[400],
                           secondcolor: Colors.green,
                           count: 0.toString(),
-                          title: "Surat Masuk",
+                          title: "Surat Masuk Disposisi",
                         );
                     }
                   }else{
