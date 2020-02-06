@@ -345,6 +345,7 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                                               print(
                                                   "Awal firebase 2 : $dispositionCommand");
                                               Navigator.of(context).pop();
+                                              _textEditingController.clear();
                                             },
                                             color: Colors.amber[600],
                                             child: Text("OK",
