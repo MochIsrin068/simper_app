@@ -31,7 +31,6 @@ class _HistoryMailInState extends State<HistoryMailEnd> {
   void initState() {
     super.initState();
     getIdJabatan();
-    print("Ini Instruksinya Bos : ${widget.instruksi.split(",")[1]}");
   }
 
   @override
@@ -393,9 +392,9 @@ class _HistoryMailInState extends State<HistoryMailEnd> {
             children: <Widget>[
               Text("Instruksi Untuk Anda : "),
               Divider(),
-              Text("- ${widget.instruksi.split(",")[0]}",  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text((widget.instruksi == "" || widget.instruksi.split(",") == null) ? "" : "- ${widget.instruksi.split(",")[0]}",  style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 4.0),
-              Text(widget.instruksi.split(",").length == 1 ? "" : "- ${widget.instruksi.split(",")[1]}",  style: TextStyle(fontWeight: FontWeight.bold))
+              Text((widget.instruksi == "" || widget.instruksi.split(",").length == 1) ? "" : "- ${widget.instruksi.split(",")[1]}",  style: TextStyle(fontWeight: FontWeight.bold))
             ],
           ),
         ),
