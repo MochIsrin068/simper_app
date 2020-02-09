@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/disposisiMasuk.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
@@ -43,7 +44,7 @@ class _AllMailInState extends State<AllMailIn> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    icon: Icon(Icons.arrow_back_ios),
+                    icon: Icon(LineIcons.arrow_left, size: 30.0,),
                   ),
                   Container(
                     child: Column(
@@ -59,50 +60,34 @@ class _AllMailInState extends State<AllMailIn> {
                       ],
                     ),
                   ),
-                  Container()
+                  Icon(LineIcons.arrow_left, color: Colors.transparent, size: 30.0,),
+                
                 ],
               ),
             ),
             Divider(),
-            // Container(
-            //   margin: EdgeInsets.only(bottom: 10.0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: <Widget>[
-            //       Container(
-            //         decoration: BoxDecoration(
-            //           borderRadius: BorderRadius.circular(6.0),
-            //           color: Colors.grey[200],
-            //         ),
-            //         height: 40.0,
-            //         width: MediaQuery.of(context).size.width - 70,
-            //         padding: EdgeInsets.symmetric(horizontal: 10.0),
-            //         child: TextField(
-            //           decoration: InputDecoration(
-            //               prefixIcon: Icon(
-            //                 FontAwesomeIcons.search,
-            //                 size: 20.0,
-            //               ),
-            //               hintText: "Search...",
-            //               border: InputBorder.none),
-            //         ),
-            //       ),
-            //       IconButton(
-            //         color: Colors.grey,
-            //         icon: Icon(FontAwesomeIcons.sort),
-            //         onPressed: () {},
-            //       )
-            //     ],
-            //   ),
-            // ),
             FutureBuilder(
               future: disposisiMasukData(_id),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data["data"] == null) {
-                    return Center(
-                      child: Text(snapshot.data["message"]),
-                    );
+                    return Container(
+                        height: MediaQuery.of(context).size.height / 5,
+                        padding: EdgeInsets.all(20.0),
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.grey[100],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              "assets/ico/no.png",
+                              width: 50.0,
+                              height: 50.0,
+                            ),
+                            Center(child: Text(snapshot.data["message"]))
+                          ],
+                        ));
                   } else {
                     return ListView.builder(
                       physics: ScrollPhysics(),
@@ -117,6 +102,8 @@ class _AllMailInState extends State<AllMailIn> {
                               ["suratmasuk_noagenda"],
                           idDisposisi: snapshot.data["data"][i]["disposisi_id"],
                           title: snapshot.data["data"][i]["skpd_pengirim"],
+                          nomorsurat: snapshot.data["data"][i]
+                              ["suratmasuk_nosurat"],
                         );
                       },
                     );

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/editProfile.dart';
 
@@ -77,8 +78,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
             Navigator.of(context).pop();
           },
           icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
+            LineIcons.arrow_left,
+            size: 30.0,
+            color: Colors.black87,
           ),
         ),
       ),
@@ -95,7 +97,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 child: TextField(
                   controller: _controllerUsername,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(FontAwesomeIcons.user, size: 14.0),
+                      prefixIcon: Icon(LineIcons.user, size: 20.0),
                       border: InputBorder.none,
                       hintText: "Username..."),
                 ),
@@ -109,7 +111,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 child: TextField(
                   controller: _controllerFirstname,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.short_text, size: 14.0),
+                      prefixIcon: Icon(LineIcons.pencil, size: 20.0),
                       border: InputBorder.none,
                       hintText: "Nama Depan..."),
                 ),
@@ -123,7 +125,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 child: TextField(
                   controller: _controllerLastname,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.short_text, size: 14.0),
+                      prefixIcon: Icon(LineIcons.pencil, size: 20.0),
                       border: InputBorder.none,
                       hintText: "Nama Belakang..."),
                 ),
@@ -166,7 +168,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                   obscureText: _isObscure,
                   controller: _controllerPassword,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(FontAwesomeIcons.lock, size: 14.0),
+                      prefixIcon: Icon(LineIcons.lock, size: 20.0),
                       border: InputBorder.none,
                       suffixIcon: IconButton(
                         onPressed: () {
@@ -176,9 +178,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         },
                         icon: Icon(
                             _isObscure
-                                ? FontAwesomeIcons.eyeSlash
-                                : FontAwesomeIcons.eye,
-                            size: 14.0),
+                                ? LineIcons.eye_slash
+                                : LineIcons.eye,
+                            size: 20.0),
                       ),
                       hintText: "Password..."),
                 ),

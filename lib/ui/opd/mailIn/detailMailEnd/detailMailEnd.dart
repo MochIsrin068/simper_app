@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:simper_app/model/detailDispositionIn.dart';
 import 'package:simper_app/ui/opd/mailDispositioned.dart/detail/historyDisposition.dart';
 
@@ -70,7 +71,7 @@ class _DetailDispositionState extends State<DetailMailEnd> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              icon: Icon(Icons.arrow_back_ios),
+                              icon: Icon(LineIcons.arrow_left, size: 30.0,),
                             ),
                             Center(
                               child: Text("Detail Surat",
@@ -79,9 +80,9 @@ class _DetailDispositionState extends State<DetailMailEnd> {
                                       fontSize: 18.0)),
                             ),
                             IconButton(
-                              icon: Icon(_isDocument
-                                  ? FontAwesomeIcons.list
-                                  : FontAwesomeIcons.file),
+                              icon:  _isDocument
+                                  ? Image.asset("assets/ico/indata.png", width: 28, height: 28,)
+                                  : Image.asset("assets/ico/file.png", width: 28, height: 28,),
                               onPressed: () {
                                 setState(() {
                                   _isDocument = _isDocument ? false : true;

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/detailDispositionIn.dart';
 import 'package:simper_app/model/disposisiMasuk.dart';
@@ -133,18 +134,20 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
 
         // addBadge();
       },
-      onBackgroundMessage: Platform.isIOS ? null : (Map<String, dynamic> message) async {
-        print("onBackgroundMessage: $message");
-        if (message.containsKey('data')) {
-          await displayNotification(message['data']['title'],
-              message['data']['body']);
-        }
+      onBackgroundMessage: Platform.isIOS
+          ? null
+          : (Map<String, dynamic> message) async {
+              print("onBackgroundMessage: $message");
+              if (message.containsKey('data')) {
+                await displayNotification(
+                    message['data']['title'], message['data']['body']);
+              }
 
-        if (message.containsKey('notification')) {
-          await displayNotification(message['notification']['title'],
-              message['notification']['body']);
-        }
-      },
+              if (message.containsKey('notification')) {
+                await displayNotification(message['notification']['title'],
+                    message['notification']['body']);
+              }
+            },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
         await displayNotification(
@@ -269,8 +272,8 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                 ),
                 _id == null
                     ? Icon(
-                        FontAwesomeIcons.solidBell,
-                        size: 28,
+                        LineIcons.bell,
+                        size: 30,
                         color: Colors.black.withOpacity(0.5),
                       )
                     : FutureBuilder(
@@ -289,8 +292,8 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                                 ),
                                 child: IconButton(
                                   icon: Icon(
-                                    FontAwesomeIcons.solidBell,
-                                    size: 28,
+                                    LineIcons.bell,
+                                    size: 30,
                                     color: Colors.black.withOpacity(0.5),
                                   ),
                                   onPressed: () {
@@ -315,8 +318,8 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                                 ),
                                 child: IconButton(
                                   icon: Icon(
-                                    FontAwesomeIcons.solidBell,
-                                    size: 28,
+                                    LineIcons.bell,
+                                    size: 30,
                                     color: Colors.black.withOpacity(0.5),
                                   ),
                                   onPressed: () {},
@@ -335,8 +338,8 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                               ),
                               child: IconButton(
                                 icon: Icon(
-                                  FontAwesomeIcons.solidBell,
-                                  size: 28,
+                                  LineIcons.bell,
+                                  size: 30,
                                   color: Colors.black.withOpacity(0.5),
                                 ),
                                 onPressed: () {},
@@ -368,33 +371,33 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                 future: disposisiMasukData(_id),
                 builder: (context, snap) {
                   // print(snap.data["data"]);
-                  if(snap.hasData){
+                  if (snap.hasData) {
                     if (snap.data["status"]) {
                       return HomeComponents(
-                          icon: Icon(
-                            Icons.mail_outline,
-                            size: 60.0,
-                            color: Colors.white,
-                          ),
-                          primarycolor: Colors.amber,
-                          secondcolor: Colors.amber[600],
-                          count: snap.data["data"].length.toString(),
-                          title: "Surat Masuk",
-                        );
-                    }else{
+                        icon: Icon(
+                          LineIcons.envelope,
+                          size: 60.0,
+                          color: Colors.white,
+                        ),
+                        primarycolor: Colors.amber,
+                        secondcolor: Colors.amber[600],
+                        count: snap.data["data"].length.toString(),
+                        title: "Surat Masuk",
+                      );
+                    } else {
                       return HomeComponents(
-                          icon: Icon(
-                            Icons.mail_outline,
-                            size: 60.0,
-                            color: Colors.white,
-                          ),
-                          primarycolor: Colors.amber,
-                          secondcolor: Colors.amber[600],
-                          count: 0.toString(),
-                          title: "Surat Masuk",
-                        );
+                        icon: Icon(
+                          LineIcons.envelope,
+                          size: 60.0,
+                          color: Colors.white,
+                        ),
+                        primarycolor: Colors.amber,
+                        secondcolor: Colors.amber[600],
+                        count: 0.toString(),
+                        title: "Surat Masuk",
+                      );
                     }
-                  }else{
+                  } else {
                     return ShimmerHomeCard();
                   }
                 },
@@ -411,33 +414,33 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                 future: suratTerdisposisiData(_id),
                 builder: (context, snap) {
                   // print(snap.data["data"]);
-                  if(snap.hasData){
+                  if (snap.hasData) {
                     if (snap.data["status"]) {
                       return HomeComponents(
-                          icon: Icon(
-                            Icons.mail_outline,
-                            size: 60.0,
-                            color: Colors.white,
-                          ),
-                          primarycolor: Colors.green[400],
-                          secondcolor: Colors.green,
-                          count: snap.data["data"].length.toString(),
-                          title: "Surat Masuk Disposisi",
-                        );
-                    }else{
+                        icon: Icon(
+                          LineIcons.check_square,
+                          size: 60.0,
+                          color: Colors.white,
+                        ),
+                        primarycolor: Colors.cyan[400],
+                        secondcolor: Colors.cyan,
+                        count: snap.data["data"].length.toString(),
+                        title: "Surat Masuk Disposisi",
+                      );
+                    } else {
                       return HomeComponents(
-                          icon: Icon(
-                            Icons.mail_outline,
-                            size: 60.0,
-                            color: Colors.white,
-                          ),
-                          primarycolor: Colors.green[400],
-                          secondcolor: Colors.green,
-                          count: 0.toString(),
-                          title: "Surat Masuk Disposisi",
-                        );
+                        icon: Icon(
+                          Icons.done_all,
+                          size: 60.0,
+                          color: Colors.white,
+                        ),
+                        primarycolor: Colors.cyan[400],
+                        secondcolor: Colors.cyan,
+                        count: 0.toString(),
+                        title: "Surat Masuk Disposisi",
+                      );
                     }
-                  }else{
+                  } else {
                     return ShimmerHomeCard();
                   }
                 },
@@ -537,6 +540,7 @@ class _HomeScreenOpdState extends State<HomeScreenOpd> {
                           nosurat: snapshot.data[i]["suratmasuk_noagenda"],
                           idDisposisi: snapshot.data[i]["disposisi_id"],
                           title: snapshot.data[i]["skpd_pengirim"],
+                          nomorsurat: snapshot.data[i]["suratmasuk_nosurat"],
                         );
                       },
                     );

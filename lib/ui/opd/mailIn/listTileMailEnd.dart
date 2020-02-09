@@ -4,11 +4,16 @@ import 'package:simper_app/model/detailDispositionIn.dart';
 import 'package:simper_app/ui/opd/mailIn/detailMailEnd/detailMailEnd.dart';
 
 class ListTileMailEnd extends StatefulWidget {
-  final String title, date, nosurat, idDisposisi;
+  final String title, date, nosurat, idDisposisi, nomorsurat;
   final Color color;
 
   ListTileMailEnd(
-      {this.title, this.date, this.nosurat, this.color, this.idDisposisi});
+      {this.title,
+      this.date,
+      this.nosurat,
+      this.color,
+      this.idDisposisi,
+      this.nomorsurat});
 
   @override
   _ListTileMailDispositionState createState() =>
@@ -31,7 +36,10 @@ class _ListTileMailDispositionState extends State<ListTileMailEnd> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey[100])),
+        color: Colors.white,
+      ),
       margin: EdgeInsets.only(bottom: 4.0),
       child: ListTile(
         onTap: () {
@@ -67,7 +75,26 @@ class _ListTileMailDispositionState extends State<ListTileMailEnd> {
                       color: Colors.white, fontWeight: FontWeight.bold)),
             )),
         title: Text(widget.title),
-        subtitle: Text(widget.date),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(
+              height: 2.0,
+            ),
+            Text(
+                widget.date != ""
+                    ? "${widget.date.split("-")[2]} - ${widget.date.split("-")[1]} - ${widget.date.split("-")[0]}"
+                    : "",
+                style: TextStyle(fontSize: 12.0)),
+            SizedBox(
+              height: 2.0,
+            ),
+            Text("No Surat : " + widget.nomorsurat,
+                style: TextStyle(fontSize: 12.0))
+          ],
+        ),
       ),
     );
   }

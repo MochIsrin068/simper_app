@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/bloc/changeCommandDisposition.dart';
@@ -178,7 +179,8 @@ class _AddMailInDisposisiState extends State<AddMailInDisposisi> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  icon: Icon(Icons.arrow_back_ios),
+                    icon: Icon(LineIcons.arrow_left, size: 30.0,),
+                  
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 10.0),

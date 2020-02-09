@@ -100,7 +100,18 @@ class _MailDispositionedState extends State<MailDispositioned> {
                           padding: EdgeInsets.all(20.0),
                           width: MediaQuery.of(context).size.width,
                           color: Colors.grey[100],
-                          child: Center(child: Text(snapshot.data["message"])));
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset(
+                                "assets/ico/no.png",
+                                width: 50.0,
+                                height: 50.0,
+                              ),
+                              Center(child: Text(snapshot.data["message"]))
+                            ],
+                          ));
                     } else {
                       return ListView.builder(
                         physics: ScrollPhysics(),
@@ -116,6 +127,8 @@ class _MailDispositionedState extends State<MailDispositioned> {
                             idDisposisi: snapshot.data["data"][i]
                                 ["disposisi_id"],
                             title: snapshot.data["data"][i]["skpd_pengirim"],
+                            nomorsurat: snapshot.data["data"][i]
+                                ["suratmasuk_nosurat"],
                           );
                         },
                       );

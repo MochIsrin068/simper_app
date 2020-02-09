@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:simper_app/bloc/loginBloc.dart';
 import 'package:simper_app/ui/general/login/connectivityValidation.dart';
@@ -73,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                       child: TextField(
                         controller: _usernameController,
                         decoration: InputDecoration(
-                            prefixIcon: Icon(FontAwesomeIcons.user, size: 14.0),
+                            prefixIcon: Icon(LineIcons.user, size: 20.0),
                             border: InputBorder.none,
                             hintText: "Username..."),
                       ),
@@ -91,15 +92,15 @@ class LoginScreen extends StatelessWidget {
                           obscureText: loginBloc.obscure,
                           decoration: InputDecoration(
                               prefixIcon:
-                                  Icon(FontAwesomeIcons.lock, size: 14.0),
+                                  Icon(LineIcons.lock, size: 20.0),
                               border: InputBorder.none,
                               suffixIcon: IconButton(
                                 padding: EdgeInsets.all(0.0),
                                 icon: Icon(
                                     loginBloc.obscure
-                                        ? FontAwesomeIcons.eyeSlash
-                                        : FontAwesomeIcons.eye,
-                                    size: 20.0),
+                                        ? LineIcons.eye_slash
+                                        : LineIcons.eye,
+                                    size: 22.0),
                                 onPressed: () {
                                   loginBloc.obscure
                                       ? loginBloc.obscure = false
@@ -116,13 +117,14 @@ class LoginScreen extends StatelessWidget {
                     padding: EdgeInsets.only(right: 6.0),
                     alignment: Alignment.topRight,
                     child: MaterialButton(
+                      elevation: 1.0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0)),
+                          borderRadius: BorderRadius.circular(4.0)),
                       onPressed: () {
                         // Navigator.of(context).pushReplacementNamed("/navbaropd");
                         getConnection(context, _usernameController.text, _passwordController.text);
                       },
-                      color: Colors.pink[400],
+                      color: Colors.lightBlue,
                       child: Text("Masuk",
                           style: TextStyle(
                               color: Colors.white,

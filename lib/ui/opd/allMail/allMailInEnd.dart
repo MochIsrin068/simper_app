@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/suratMasukSelesai.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
@@ -42,7 +43,7 @@ class _AllMailOutState extends State<AllMailInEnd> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    icon: Icon(Icons.arrow_back_ios),
+                    icon: Icon(LineIcons.arrow_left, size: 30.0,),
                   ),
                   Container(
                     child: Column(
@@ -58,7 +59,7 @@ class _AllMailOutState extends State<AllMailInEnd> {
                       ],
                     ),
                   ),
-                  Container()
+                  Icon(LineIcons.arrow_left, color: Colors.transparent, size: 30.0,),
                 ],
               ),
             ),
@@ -72,7 +73,23 @@ class _AllMailOutState extends State<AllMailInEnd> {
                         padding: EdgeInsets.all(20.0),
                         width: MediaQuery.of(context).size.width,
                         color: Colors.grey[100],
-                        child: Center(child: Text(snapshot.data["message"])));
+                        child: Container(
+                            height: MediaQuery.of(context).size.height / 5,
+                            padding: EdgeInsets.all(20.0),
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.grey[100],
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Image.asset(
+                                  "assets/ico/no.png",
+                                  width: 50.0,
+                                  height: 50.0,
+                                ),
+                                Center(child: Text(snapshot.data["message"]))
+                              ],
+                            )));
                   } else {
                     return ListView.builder(
                       physics: ScrollPhysics(),
@@ -87,6 +104,8 @@ class _AllMailOutState extends State<AllMailInEnd> {
                               ["suratmasuk_noagenda"],
                           idDisposisi: snapshot.data["data"][i]["disposisi_id"],
                           title: snapshot.data["data"][i]["skpd_pengirim"],
+                          nomorsurat: snapshot.data["data"][i]
+                              ["suratmasuk_nosurat"],
                         );
                       },
                     );

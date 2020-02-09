@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simper_app/model/suratMasukSelesai.dart';
-import 'package:simper_app/ui/general/shimmer/shimmerMailCard.dart';
-import 'package:simper_app/ui/opd/mailIn/listTileMailEnd.dart';
 
 class AllMailDisposisioned extends StatefulWidget {
   @override
@@ -42,7 +40,7 @@ class _AllMailOutState extends State<AllMailDisposisioned> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    icon: Icon(Icons.arrow_back_ios),
+                    icon: Icon(LineIcons.arrow_left, size: 30.0,),
                   ),
                   Container(
                     child: Column(
@@ -58,46 +56,11 @@ class _AllMailOutState extends State<AllMailDisposisioned> {
                       ],
                     ),
                   ),
-                  Container()
+                  Icon(LineIcons.arrow_left, color: Colors.transparent, size: 30.0,),
                 ],
               ),
             ),
             Divider(),
-            // FutureBuilder(
-            //   future: suratMasukSelesaiData(_id),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasData) {
-            //       if (snapshot.data["data"] == null) {
-            //         return Container(
-            //             padding: EdgeInsets.all(20.0),
-            //             width: MediaQuery.of(context).size.width,
-            //             color: Colors.grey[100],
-            //             child: Center(child: Text(snapshot.data["message"])));
-            //       } else {
-            //         return ListView.builder(
-            //           physics: ScrollPhysics(),
-            //           shrinkWrap: true,
-            //           itemCount: snapshot.data["data"].length,
-            //           itemBuilder: (context, i) {
-            //             return ListTileMailEnd(
-            //               color: Colors.green[300],
-            //               date: snapshot.data["data"][i]
-            //                   ["suratmasuk_tanggalterima"],
-            //               nosurat: snapshot.data["data"][i]
-            //                   ["suratmasuk_noagenda"],
-            //               idDisposisi: snapshot.data["data"][i]["disposisi_id"],
-            //               title: snapshot.data["data"][i]["skpd_pengirim"],
-            //             );
-            //           },
-            //         );
-            //       }
-            //     } else {
-            //       return Container(
-            //         child: ShimmerMailCard(),
-            //       );
-            //     }
-            //   },
-            // ),
           ],
         ),
       ),

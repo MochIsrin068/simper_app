@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:simper_app/ui/general/account/AccountScreen.dart';
-import 'package:simper_app/ui/opd/mailDataIn/mailDataInScreen.dart';
 import 'package:simper_app/ui/opd/mailDispositioned.dart/mailDispositionedScreen.dart';
 import 'package:simper_app/ui/opd/mailIn/mailInScreen.dart';
 
@@ -55,15 +54,16 @@ class _NavigationBarOpdState extends State<NavigationBarOpd>
         elevation: 10.0,
         color: Colors.white,
         child: TabBar(
+          labelStyle: TextStyle(fontSize: 10.0, fontWeight: FontWeight.w600),
+          indicatorColor: Colors.transparent,
           unselectedLabelColor: Colors.grey,
-          labelColor: Colors.blueAccent,
+          labelColor: Colors.lightBlue,
           controller: _tabController,
           tabs: <Widget>[
-            Tab(icon: Icon(FontAwesomeIcons.home)),
-            Tab(icon: Icon(FontAwesomeIcons.mailBulk)),
-            Tab(icon: Icon(FontAwesomeIcons.checkSquare)),
-            // Tab(icon: Icon(FontAwesomeIcons.file)),
-            Tab(icon: Icon(FontAwesomeIcons.user)),
+            Tab(icon: Icon(LineIcons.home), text: "Home",),
+            Tab(icon: Icon(LineIcons.envelope), text : "Surat Masuk"),
+            Tab(icon: Icon(LineIcons.check_circle), text: "Surat Terdisposisi",),
+            Tab(icon: Icon(LineIcons.user), text : "Akun"),
           ],
         ),
       ),

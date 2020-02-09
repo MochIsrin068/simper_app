@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/profile.dart';
 import 'package:simper_app/ui/general/account/editAccountScreen.dart';
@@ -62,7 +63,6 @@ class _AccountScreenState extends State<AccountScreen> {
     print("UNSubscripe : $_id");
     removeAllNotif();
 
-
     // _firebaseMessaging.configure(
     //   onMessage: (Map<String, dynamic> message) async {
     //     print("onMessage: $message");
@@ -111,12 +111,12 @@ class _AccountScreenState extends State<AccountScreen> {
                   IconButton(
                     onPressed: () {},
                     icon: Icon(
-                      Icons.help,
+                      LineIcons.info_circle,
                       color: Colors.black54,
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 10.0),
+                    padding: EdgeInsets.only(top: 14.0),
                     child: Text("My Account",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -126,7 +126,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   IconButton(
                     onPressed: () {},
                     icon: Icon(
-                      Icons.settings,
+                      LineIcons.cog,
                       color: Colors.black54,
                     ),
                   )
@@ -140,11 +140,11 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: <Widget>[
                   Center(
                     child: CircleAvatar(
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: Colors.grey[100],
                       radius: 46.0,
                       child: CircleAvatar(
                         radius: 44.0,
-                        backgroundImage: AssetImage("assets/images/person.png"),
+                        backgroundImage: AssetImage("assets/images/person3.png"),
                       ),
                     ),
                   ),
@@ -170,7 +170,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             Chip(
                                 backgroundColor: Colors.amber,
                                 label: Text(
-                                    "${snap.data["first_name"]} ${snap.data["last_name"]}",
+                                    "${snap.data["first_name"]}",
                                     style: TextStyle(
                                         fontSize: 14.0, color: Colors.white))),
                             SizedBox(height: 4.0),
@@ -219,15 +219,15 @@ class _AccountScreenState extends State<AccountScreen> {
                                       nohp: snap.data["phone"],
                                     )));
                           },
-                          leading: Icon(FontAwesomeIcons.edit,
-                              color: Color(0xffbcecb0)),
+                          leading: Icon(LineIcons.edit,
+                              color: Colors.green[200]),
                           title: Text("Edit Profile"),
                           trailing: Text(">"),
                         );
                       } else {
                         return ListTile(
-                          leading: Icon(FontAwesomeIcons.edit,
-                              color: Color(0xffbcecb0)),
+                          leading: Icon(LineIcons.power_off,
+                              color: Colors.green[200]),
                           title: Text("Edit Profile"),
                           trailing: Text(">"),
                         );
