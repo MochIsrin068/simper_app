@@ -1,11 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simper_app/model/profile.dart';
 import 'package:simper_app/ui/general/account/editAccountScreen.dart';
+import 'package:simper_app/ui/general/notification/detailMailInNotif.dart';
 import 'package:simper_app/ui/general/shimmer/shimmerProfile.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -42,10 +45,128 @@ class _AccountScreenState extends State<AccountScreen> {
     setState(() {});
   }
 
+  //GET NOTIFIKASI
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  getNotif() async {
+    await _getData();
+
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = IOSInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
+
+    // _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    // _firebaseMessaging.getToken();
+
+    _firebaseMessaging.subscribeToTopic(_id);
+    print("Subscripe : $_id");
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        await displayNotification(
+            message['notification']['title'], message['notification']['body']);
+
+        // addBadge();
+      },
+      onBackgroundMessage: Platform.isIOS
+          ? null
+          : (Map<String, dynamic> message) async {
+              print("onBackgroundMessage: $message");
+              if (message.containsKey('data')) {
+                await displayNotification(
+                    message['data']['title'], message['data']['body']);
+              }
+
+              if (message.containsKey('notification')) {
+                await displayNotification(message['notification']['title'],
+                    message['notification']['body']);
+              }
+            },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        await displayNotification(
+            message['data']['title'], message['notification']['body']);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+
+        await displayNotification(
+            message['notification']['title'], message['notification']['body']);
+      },
+    );
+
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+
+    _firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      print(token);
+    });
+  }
+
+  // SHOW NOTIF IOS AND ANDROID
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => new CupertinoAlertDialog(
+        title: new Text(title),
+        content: new Text(body),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: new Text('Ok'),
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future onSelectNotification(String payload) async {
+    // await removeBadge();
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => DetailMailInNotif(disposisiId: "$payload")));
+    }
+  }
+
+  Future displayNotification(String title, String body) async {
+    var getExtenstion = body.split("/");
+    String fileExtenstion = getExtenstion[1];
+
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your channel id', 'your channel name', 'your channel description',
+        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, '$title', '${getExtenstion[0]}', platformChannelSpecifics,
+        payload: fileExtenstion);
+  }
+
   @override
   void initState() {
     super.initState();
     _getData();
+    getNotif();
   }
 
   // Logout
@@ -56,44 +177,10 @@ class _AccountScreenState extends State<AccountScreen> {
 
   refreshToken() {
     print("Refresh Token");
-    // _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
-    // _firebaseMessaging.getToken();
-
     _firebaseMessaging.unsubscribeFromTopic(_id);
     print("UNSubscripe : $_id");
     removeAllNotif();
-
-    // _firebaseMessaging.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     print("onMessage: $message");
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     print("onLaunch: $message");
-    //   },
-    //   onResume: (Map<String, dynamic> message) async {
-    //     print("onResume: $message");
-    //   },
-    // );
-
-    // _firebaseMessaging.requestNotificationPermissions(
-    //     const IosNotificationSettings(sound: true, badge: true, alert: true));
-    // _firebaseMessaging.onIosSettingsRegistered
-    //     .listen((IosNotificationSettings settings) {
-    //   print("Settings registered: $settings");
-    // });
-
-    // _firebaseMessaging.getToken().then((String token) {
-    //   assert(token != null);
-    //   print(token);
-    // });
   }
-
-  // SEND TOKEN
-  // void sendTokenToServer(String fcmToken) {
-  //   print('Token: $fcmToken');
-  //   // send key to your server to allow server to use
-  //   // this token to send push notifications
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +231,8 @@ class _AccountScreenState extends State<AccountScreen> {
                       radius: 46.0,
                       child: CircleAvatar(
                         radius: 44.0,
-                        backgroundImage: AssetImage("assets/images/person3.png"),
+                        backgroundImage:
+                            AssetImage("assets/images/person3.png"),
                       ),
                     ),
                   ),
@@ -169,8 +257,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             SizedBox(height: 2.0),
                             Chip(
                                 backgroundColor: Colors.amber,
-                                label: Text(
-                                    "${snap.data["first_name"]}",
+                                label: Text("${snap.data["first_name"]}",
                                     style: TextStyle(
                                         fontSize: 14.0, color: Colors.white))),
                             SizedBox(height: 4.0),
@@ -219,8 +306,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                       nohp: snap.data["phone"],
                                     )));
                           },
-                          leading: Icon(LineIcons.edit,
-                              color: Colors.green[200]),
+                          leading:
+                              Icon(LineIcons.edit, color: Colors.green[200]),
                           title: Text("Edit Profile"),
                           trailing: Text(">"),
                         );
