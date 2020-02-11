@@ -170,16 +170,41 @@ Future getConnection(
         await _getTokenNotif();
         void directly() {
           if (dataLogin["data"][0]["group_id"] == "5") {
-            // createData(
-            //     dataLogin["data"][0]["id"],
-            //     dataLogin["data"][0]["username"],
-            //     dataLogin["data"][0]["group_id"]);
-            Navigator.of(context).pop();
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => NavigationBarOpd(
-                  username: username,
-                  password: password,
-                )));
+            if (dataLogin["data"][0]["id"] == "1" ||
+                dataLogin["data"][0]["id"] == "2" ||
+                dataLogin["data"][0]["id"] == "3") {
+              showCupertinoDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                      title: Text("Login Validasi"),
+                      content: Container(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text(
+                            "Walikota, wakil walikota dan sekda tidak dapat login, silahkan gunakan aplikasi SIMPER untuk Walikota, wakil walikota dan sekda!",
+                            style: TextStyle(height: 1.6)),
+                      ),
+                      actions: <Widget>[
+                        MaterialButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          color: Colors.amber,
+                          child: Text("Tutup",
+                              style: TextStyle(color: Colors.white)),
+                        )
+                      ],
+                    );
+                  });
+            } else {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => NavigationBarOpd(
+                        username: username,
+                        password: password,
+                      )));
+            }
           } else {
             showCupertinoDialog(
                 context: context,
